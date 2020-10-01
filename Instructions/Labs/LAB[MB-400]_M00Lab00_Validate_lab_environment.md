@@ -33,7 +33,7 @@ Exercise 1 – Acquire your Power Platform trial tenant
 Exercise 2 - Create your environment 
 ------------------------------------------
 
-In this exercise, you will be create your **Practice** environment that you will do the majority of your lab work in.
+In this exercise, you will be create your **Development** environment that you will do the majority of your lab work in.
 
 ### Task 1 – Create environment
 
@@ -41,7 +41,7 @@ In this exercise, you will be create your **Practice** environment that you will
 
 2. Select **Environments** and click **+New.**
 
-    - For **Name**, enter **[my initials] Practice.** (Example: AJ Practice.)
+    - For **Name**, enter **[my initials] Dev** (Example: AJ Dev)
     
     - For **Type**, select **Trial.**
     
@@ -51,8 +51,8 @@ In this exercise, you will be create your **Practice** environment that you will
     
     - On the next tab, leave all selections to default and click **Save** again.
 
-3. Your **Practice** environment should now show in the list of Environments. 
+3. Your **Dev** environment should now show in the list of Environments. 
 
-4. Your environment may take a few minutes to provision. Refresh the page if needed. When your environment is prepared, select your **Practice** environment by clicking on the ellipses next to its name to expand the drop down menu and select **Settings.** 
+4. Your environment may take a few minutes to provision. Refresh the page if needed. When your environment is prepared, select your **Dev** environment by clicking on the ellipses next to its name to expand the drop down menu and select **Settings.** 
 
 3.  Explore the different areas in **Settings** that you are interested in but do not make any changes yet. 
