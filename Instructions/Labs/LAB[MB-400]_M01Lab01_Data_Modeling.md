@@ -64,7 +64,7 @@ To prepare your learning environments you will create a solution and publisher a
 
 	- Select your Dev environment.
 
-![Select environment - screenshot](01/Static/Mod_01_Data_Modeling_image3.png)
+    ![Select environment - screenshot](01/Static/Mod_01_Data_Modeling_image3.png)
 
 	- Select **Solutions** from the left menu and click **+** **New solution**.
 
