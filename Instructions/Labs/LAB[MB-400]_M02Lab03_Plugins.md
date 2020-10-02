@@ -383,9 +383,9 @@ Close the **PluginBase** file.
 
             }
 
-	3. Retrieve the selected status reason option and check if it is set to new request or pending.
+3. Retrieve the selected status reason option and check if it is set to new request or pending.
 
-		- Get the currently selected value of the **Status Reason** option-set. Add the code below inside the **foreach** loop.
+	- Get the currently selected value of the **Status Reason** option-set. Add the code below inside the **foreach** loop.
 
                 var currentValue = inspection.GetAttributeValue<OptionSetValue>("statuscode");
 
@@ -396,9 +396,9 @@ Close the **PluginBase** file.
             canceledInspectionsCount++;
             }
 
-	4. Cancel the inspections that are pending or new request
+4. Cancel the inspections that are pending or new request
 
-		- Set the **Status Reason** selected value to **Canceled**. Add the code below inside the if statement inside the foreach loop. Make sure that 463270003 is the value for **Canceled** **Status Reason** in the **Inspections** entity. If this differs, please update the value with actual value for **Canceled Status Reason**.
+	- Set the **Status Reason** selected value to **Canceled**. Add the code below inside the if statement inside the foreach loop. Make sure that 463270003 is the value for **Canceled** **Status Reason** in the **Inspections** entity. If this differs, please update the value with actual value for **Canceled Status Reason**.
 
                 inspection["statuscode"] = new OptionSetValue(463270003);
 
