@@ -1,556 +1,698 @@
----
-lab:
-    title: 'Lab 03: Canvas app'
-    module: 'Module 01: Introduction to developing with the Power Platform'
----
 
-# MB-400: Microsoft PowerApps + Dynamics 365 Developer
-## Module 1, Lab 3 – Canvas App
 
-Scenario
-========
+MB400: Microsoft Power Apps + Dynamics 365 Developer
 
-A regional building department, issues and tracks permits for new buildings and
-updates for remodeling of existing buildings. Throughout this course you will
-build applications and automation to enable the regional building department to
-manage the permitting process. This will be an end-to-end solution which will
-help you understand the overall process flow.
+## Module 01, Lab 03 – Canvas app
 
-As we continue to build our solution, we will now design a PowerApps canvas app
-that the inspectors will use in the field on their mobile devices. Canvas apps
-are low code apps that can be designed for a tablet or mobile phone layouts. You
-will build a two-screen canvas app that allows inspectors quickly access and
-process the inspections.
+# Scenario
 
-High-level lab steps
-======================
+A regional building department issues and tracks permits for new buildings and updates for remodeling of existing buildings. Throughout this course you will build applications and automation to enable the regional building department to manage the permitting process. This will be an end-to-end solution which will help you understand the overall process flow.
+
+As we continue to build our solution, we will now design a Power Apps canvas app that the inspectors will use in the field on their mobile devices. Canvas apps are low code apps that can be designed for a tablet or mobile phone layouts. You will build a two-screen canvas app that allows inspectors quickly access and process the inspections.
+
+# High-level lab steps
 
 We will follow the below schema to design the canvas app:
 
--   Create the app using the tablet form factor
+- Create the app using the tablet form factor
 
--   Connect to CDS as a data source
+- Connect to CDS as a data source
 
--   Configure a gallery control to show the pending inspections
+- Configure a gallery control to show the pending inspections
 
--   Use a CDS view to populate the gallery
+- Use a CDS view to populate the gallery
 
--   Configure a detail page with inspection info
+- Configure a detail page with inspection info
 
--   Handle saving the inspection results to CDS
+- Handle saving the inspection results to CDS
 
--   Export the solution with the data model and apps and import it to the
-    “Production” environment
+- Export the solution with the data model and apps and import it to the “Production” environment
 
-The first screen in the application will show all Pending Inspections for the
-logged in Inspector. The second screen lets the inspector update the selected
-Inspection.
+This is the first screen in the application to show all Pending Inspections for the logged in Inspector.
 
-Things to consider before you begin
------------------------------------
+![Screen one of the application - screenshot](M01L03/Static/Mod_03_Canvas_App_image1.png)
 
--   What would an inspector need quick access to while in the field?
+This second screen lets the inspector update the selected Inspection.
 
--   How do we move our solution from the development to the production
-    environment?
+![Second screen of the application - screenshot ](M01L03/Static/Mod_03_Canvas_App_image2.png)
 
--   Remember to continue working in your DEVELOPMENT environment. We’ll move
-    everything to production in Exercise 2 of this lab.
+## Things to consider before you begin
 
-Exercise \#1: Create Canvas App
-===============================
+- What would an inspector need quick access to while in the field?
+
+- How do we move our solution from the development to the production environment?
+
+- Remember to continue working in your DEVELOPMENT environment. We’ll move everything to production in Exercise 2 of this lab.
+
+ 
+
+  
+‎ 
+
+# Exercise #1: Create Canvas App
 
 **Objective:** In this exercise, you will create a canvas app.
 
-Task \#1: Create Canvas App
----------------------------
+## Task #1: Create Canvas App
 
-1.  Open the Permit Management solution.
+1. Open the Permit Management solution.
 
-    -   Sign in to <https://make.powerapps.com>
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/)
 
-    -   Select your **Dev environment.**
+	- Select your **Dev environment.**
 
-    -   Select **Solutions**.
+	- Select **Solutions**.
 
-    -   Click to open the **Permit Management** solution.
+	- Click to open the **Permit Management** solution. 
 
-2.  Create new canvas application
+2. Create new canvas application
 
-    -   Click **New** and select **App \| Canvas App \| Tablet Form Factor**.
-        This will open the App Editor in a New window.
+	- Click **+ New** and select **App | Canvas App** **| Tablet Form Factor**. This will open the App Editor in a New window.
 
-    -   If you are creating your first app, this will ask you to set the
-        Country/region for the app. Click **Get Started.**
+    ![Create new canvas application - screenshot](M01L03/Static/Mod_03_Canvas_App_image3.png)
 
-    -   Click File and select Save As.
+    If you are creating your first app, this will ask you to set the Country/region for the app. Click **Get Started.**
 
-    -   Ensure that **The Cloud** is selected. Enter **Inspector** for Name and
-        click **Save**. This will make sure that the changes are not removed if
-        the app closes unexpectedly.
+    ![Get started popup - screenshot](M01L03/Static/Mod_03_Canvas_App_image4.png)
 
-3.  Enable Components for the application.
+	- Click **File** and select **Save As**.
 
-    -   Select **App Settings** and then select **Advanced Settings**.
+	- Select **The Cloud**, enter **Inspector** for Name, and click **Save**. This will make sure that the changes are not removed if the app closes unexpectedly.
 
-    -   Scroll down and ensure that the toggle box **Components** is turned **On.**
+    ![Save application](M01L03/Static/Mod_03_Canvas_App_image5.png)
 
-    -   Click on the app designer back button.
+	- Click on the app designer button.
 
-4.  Rename Screen1.
+    ![Back to app designer - screenshot](M01L03/Static/Mod_03_Canvas_App_image6.png)
 
-    -   Go to the **Tree View** and double click on **Screen1**.
+3. Rename Screen1.
 
-    -   Rename it MainScreen and press **Enter.**
+	- Go to the **Tree View** and double click on **Screen1**.
 
-5.  Import Component.
+	- Rename it **Main Screen** and press **Enter.**
 
-    -   Select the **Components** tab.
+    ![Rename screen - screenshot](M01L03/Static/Mod_03_Canvas_App_image7.png)
 
-    -   Click on the **… (Component Options)** button and select Import
-        **Components**.
+4. Import Component.
 
-    -   Click **Upload File**.
+	- Select the **Components** tab.
 
-    -   Browser to the lab resources folder, select the **Components** file and
-        click **Open**.
+	- Click on the **… (Component Options)** button and select Import **Components**.
 
-    -   Three components should be imported.
+    ![Import components - screenshot](M01L03/Static/Mod_03_Canvas_App_image8.png)
 
-6.  Add the Header component to the MainScreen.
+	- Click **Upload File**.
 
-    -   Select the **Screens** tab.
+	- Browser to the lab resources folder, select the **Components** file and click **Open**.
 
-    -   Select the **Insert** tab.
+    ![Select components to upload - screenshot](M01L03/Static/Mod_03_Canvas_App_image9.png)
 
-    -   Click **Custom** and select **Header**.
+5. Add the Header component to the MainScreen.
 
-    -   Rename **Header_1** to **MainHeader** by double clicking on Header_1 in the Component pane on the right.
+	- Select the **Screens** tab.
 
-7.  Change the MainHeader properties
+	- Click **+** Insert.
 
-    -   Select **MainHeader**.
+    ![Select insert - screenshot](M01L03/Static/Mod_03_Canvas_App_image10.png)
 
-    -   Change the **Text** attribute of the **MainHeader** to **My Pending Inspections**. This can be done by selecting “Text” property in the
-        dropdown below top menu. Make sure that you have selected the MainHeader
-        control while doing this step.
+	- Click to expand **Library components** and select **Header**.
 
-    -   Change the **Width** vale of the **MainHeader** to the formula below. (You may need to click into the Formula tab at the top of the screen.)
+    ![Select header - screenshot](M01L03/Static/Mod_03_Canvas_App_image11.png)
 
-               Parent.Width
+	- Select **Tree View**.
 
-Task \#3: Add Inspection Gallery
---------------------------------
+	- Rename **Header_1** to **Main Header** by double click on Header_1.
 
-1.  Add Gallery
+6. Change the Main Header properties
 
-    -   Select the **Tree View** tab
+	- Select **Main Header**.
 
-    -   Select the **MainScreen**.
+	- Change the **Text** attribute of the **Main Header** to **My Pending Inspections**. This can be done by selecting “Text” property in the dropdown below top menu. Make sure that you have selected the Main Header control while doing this step.
 
-    -   Go to the **Insert** tab.
+    ![Change text value - screenshot](M01L03/Static/Mod_03_Canvas_App_image12.png)
 
-    -   Click **Vertical Gallery.**
+	- Change the **Width** vale of the **Main Header** to the formula below.
 
-    -   Select **Inspections** for **Data Source**. When Inspection is selected,
-        this will automatically pick the fields and show them in the gallery
-        items.
+    Parent.Width
 
-    -   Rename **Gallery_1** to **InspectionList** by double clicking on Gallery_1 in the Gallery pane on the right.
+    ![Change width value - screenshot](M01L03/Static/Mod_03_Canvas_App_image13.png)
 
-2.  Select the inspector view
+## Task #2: Add Data Source
 
-    -   Make sure you have the **InspectionList** control selected.
+1. Add Permit and Inspection as data source.
 
-    -   Go to the **Properties** pane and select **Inspector View** for **View**.
+	- Select the **Data Sources** tab.
 
-3.  Change the **InspectionList** control layout
+    ![Select data sources = screenshot](M01L03/Static/Mod_03_Canvas_App_image14.png)
 
-    -   Go to the **Properties** pane and click on the **Layout** dropdown.
+	- Search for **Permit** and select **Permits**.
 
-    -   Select **Title and Subtitle** if it is not already selected.
+    ![Select permits - screenshot](M01L03/Static/Mod_03_Canvas_App_image15.png)
 
-4.  Verify the selected fields.
+	- Search for **Inspection** and select **Inspections**.
 
-    -   Go to the **Properties** pane and click on the **Edit Fields**.
+    ![Select Inspections - screenshot](M01L03/Static/Mod_03_Canvas_App_image16.png)
 
-    -   Confirm that Scheduled Date is selected for Subtitle and Inspection is
-        selected for Title. Close the Data pane.
+	- You should now have both **Permits** and **Inspections** in your app.
 
-5.  Change date time to date only.
+    ![Data sources in your app - screenshot](M01L03/Static/Mod_03_Canvas_App_image17.png)
 
-    -   Select the **Subtitle**.
+ 
 
-    -   Change the Text property of the control to the formula below.
+## Task #3: Add Inspection Gallery
 
-            DateValue(Text(ThisItem.'Scheduled Date'),"en")
+1. Add Gallery
 
-6.  Resize the Gallery
+	- Click **+ Insert** and select **Vertical Gallery**. Vertical Gallery will be added to the MainScreen.
 
-    -   Select the **InspectionList** gallery.
+    ![Insert vertical gallery - screenshot ](M01L03/Static/Mod_03_Canvas_App_image18.png)
 
-    -   Select **Width** property from the formula dropdown and enter the
-        formula below.
+	- Select **Inspections** for **Data Source**. When Inspection is selected, this will automatically pick the fields and show them in the gallery items.
 
-            Parent.Width
+    ![Select gallery data source - screenshot](M01L03/Static/Mod_03_Canvas_App_image19.png)
 
-    -   Select **Height** property and set it to the formula below.
+	- Select the **Tree View** tab.
 
-            Parent.Height - (MainHeader.Height*2)
+	- Rename **Gallery_1** to **Inspection List** by double click on Gallery_1.
 
-    -   Select the Y property from the dropdown and set it to formula below.
+2. Select the inspector view
 
-             MainHeader.Height
+	- Make sure you have the **Inspection List** control selected.
 
-    -   Select the X property from the dropdown and set it to formula below.
+	- Go to the **Properties** pane and select **Inspector View** for **View**.
 
-            MainHeader.X
+    ![Select view - screenshot](M01L03/Static/Mod_03_Canvas_App_image20.png)
 
-Task \#4: Add Inspection Details Screen
----------------------------------------
+3. Change the **Inspection List** control layout
 
-1.  Click **New Screen** from the top left menu and select **Blank**.
+	- Go to the **Properties** pane and click on the **Layout** dropdown.
 
-2.  Rename the new screen **DetailsScreen** by double click on the control in
-    Tree View.
+    ![Gallery layout - screenshot](M01L03/Static/Mod_03_Canvas_App_image21.png)
 
-3.  Add Header to the DetailsScreen and edit it
+	- Select **Title and Subtitle**.
 
-    -   Go to the **MainScreen** and copy the **MainHeader**.
+4. Verify the selected fields.
 
-    -   Go to the **DetailsScreen** and paste the **Header**.
+	- Go to the **Properties** pane and click on the **Edit Fields**.
 
-    -   Rename the Header **DetailsHeader** by double clicking on the control
-        in Tree View.
+    ![Gallery fields - screenshot](M01L03/Static/Mod_03_Canvas_App_image22.png)
 
-    -   Select the **Y** property of the **DetailsHeader** and set to **0**.
+	- Confirm that **Scheduled Date** is selected for **Subtitle** and **Name** is selected for **Tile**. Close the **Data** pane. 
 
-    -   Select the **Text** property of the **DetailsHeader** and set it to
-        formula below.
+    ![Edit field pane - screenshot](M01L03/Static/Mod_03_Canvas_App_image23.png)
 
-               InspectionList.Selected.'Inspection (contoso_inspection)'
+5. Change date time to date only.
 
-1.  Add Form to the DetailsScreen.
+	- Expand the **Inspection List** and select **Subtitle**.
 
-    -   Select the **DetailsScreen**.
+    ![Select subtitle - screenshot](M01L03/Static/Mod_03_Canvas_App_image24.png)
 
-    -   Select the **Insert** tab.
+	- Change the **Text** property of the control to the formula below.
 
-    -   Click **Edit Forms.**
+    DateValue(Text(ThisItem.'Scheduled Date'),"en")
 
-    -   Rename the form **InspectionForm**.
+6. Resize the Gallery
 
-    -   Resize the Edit form as:
+	- Select the **Inspection List** gallery.
 
-            1.  Select the **InspectionForm**.
+	- Select **Width** property from the formula dropdown and enter the formula below.
 
-            2.  Select **Width** property from the formula dropdown and enter the
-            formula below.  
-            Parent.Width
+    Parent.Width
 
-            3.  Select **Height** property and set it to the formula below.  
-            Parent.Height - (DetailsHeader.Height\*2)
+	- Select **Height** property and set it to the formula below.
 
-            4.  Select the Y property from the dropdown and set it to formula below.  
-            DetailsHeader.Height
+    Parent.Height - ('Main Header'.Height*2)
 
-            5.  Select the X property from the dropdown and set it to formula below.  
-            DetailsHeader.X
+	- Select the Y property from the dropdown and set it to formula below.
 
-2.  Set the **InspectionForm** data source
+    'Main Header'.Height
 
-    -   Select the **InspectionForm** and select the DataSource as
-        **Inspections** entity.
+	- Select the X property from the dropdown and set it to formula below.
 
-    -   Click the **Advanced** tab and scroll down to **Item.** Set the Item value to the formula below.
+    'Main Header'.X
 
-               InspectionList.Selected
+![Gallery - screenshot](M01L03/Static/Mod_03_Canvas_App_image25.png)
 
-3.  Edit InspectionForm fields. This adds the data cards for fields by default,
-    but you can add/remove the data cards as:
+ 
 
-    -   Select the **InspectionForm**.
+## Task #4: Add Inspection Details Screen
 
-    -   Go to the **Properties** pane and click **Edit Fields**.
+1. Add new screen named Details Screen
 
-    -   Click **Add Field**.
+	- Click **New Screen** and select **Blank**.
 
-    -   Select **Inspection**, **Scheduled Date**, **Status Reason**, and
-        **Comments**.
+    ![Add blank screen - screenshot](M01L03/Static/Mod_03_Canvas_App_image26.png)
 
-    -   Click **Add**.
+	- Rename the new screen **Details Screen** by double clicking on the control in Tree View.
 
-    -   The fields should be arranged in the following order: Name, Scheduled Date, Status Reason, Comments. You can
-        drag/drop to rearrange the fields.
+2. Add Header to the Details Screen and edit it
 
-4.  Go to the **Tree View** and expand the **InspectionForm**.
+	- Go to the **Main Screen** and copy the **Main Header**.
 
-5.  Select the **Scheduled Date** data card.
+    ![Copy component - screenshot](M01L03/Static/Mod_03_Canvas_App_image27.png)
 
-6.  Go to the **Properties** pane and select the **Advanced** tab.
+	- Go to the **Details Screen** and paste the **Header**.
 
-6.  Click **Unlock to change Properties**.
+    ![Paste component - screenshot](M01L03/Static/Mod_03_Canvas_App_image28.png)
 
-7.  Return to Tree View on the left. Expand the **Scheduled Date** card.
+	- Rename the Header you **Details Header** by double clicking on the control in Tree View.
 
-8.  Select **StarVisible**, **ErrorMesage**, **MinuteValue**, **Separator**, and
-    **HourValue**. (To select all at once, you can hold the Shift key.)
+    ![Rename header - screenshot](M01L03/Static/Mod_03_Canvas_App_image29.png)
 
-9.  Delete the selected controls. When the controls are deleted, you will be
-    able to see an error message.
+	- Select te **Y** property of the **Details Header** and set to **0**.
 
-10.  Select the **DateValue** control.
+	- Select the **Text** property of the **Details Header** and set it to formula below.
 
-11. Select the **Scheduled Date** DataCard.
+    'Inspection List'.Selected.Name
 
-12. Go to formula bar and select **Update**.
+    ![Change text value - screenshot](M01L03/Static/Mod_03_Canvas_App_image30.png)
 
-13. Remove everything after the **SelectedDate**. This should remove the error
-    message from the app.
+3. Add Form to the Details Screen.
 
-14. Select the **InspectionForm**. Then navigate to the **Properties** pane and click **Edit Fields**.
+	- Select the **Details Screen**.
 
-15. Expand the **Name** field.
+	- Click **+ Insert** and select **Edit Form**.
 
-16. Click on the **Control Type** dropdown and select **View Text**.
+    ![Edit form - screenshot](M01L03/Static/Mod_03_Canvas_App_image31.png)
 
-17. Expand the **Scheduled Date** field. Observe the change.
+	- Select the **Three View** tab.
 
-18. Notice we cannot change this the same way because we’ve customized it. From
-    the Tree View select DateValue control inside the **Scheduled Date**
-    Datacard and go to the **Advanced tab** of the **Properties pane**.
+	- Rename the form **Inspection Form**.
 
-19. Search for DisplayMode property and remove the existing formula and place
-    the following:
+	- Resize the Edit form as:
 
-                DisplayMode.View
+		- Select the **InspectionForm**.
 
-20. Close the **Fields** pane.
+		- Select **Width** property from the formula dropdown and enter the formula below.  
+‎   Parent.Width
 
-21. Change the Status Reason label.
+	- Select **Height** property and set it to the formula below.
 
-    -   Select the **Status Reason data card**.
+    Parent.Height - ('Details Header'.Height*2)
 
-    -   Go to the **Properties** pane and the Advanced tab, click **Unlock to
-        Change properties.**
+	- Select the Y property from the dropdown and set it to formula below.
 
-    -   Change the **DisplayName** to **Inspection Result**.
+    'Details Header'.Height
 
-22. Resize the Comments data card.
+- Select the X property from the dropdown and set it to formula below.
 
-    -   Select the **Comments** data card.
+    'Details Header'.X
 
-    -   Click and drag the right edge to the far right of the screen.
+- The form should now look like the image below.
 
-    -   Go to the **Advanced** tab of **Properties** pane and click **Unlock to
-        change properties**.
+    ![Form - screenshot](M01L03/Static/Mod_03_Canvas_App_image32.png)
 
-    -   Set the **Height** value to **300**.
+4. Set the **Inspection Form** data source
 
-    -   Select the **DataCardValue** control.
+	- Select the **Inspection Form** and select the DataSource as **Inspections** entity.
 
-    -   Set the **Height** value to **300**.
+    ![Set form data source - screenshot](M01L03/Static/Mod_03_Canvas_App_image33.png)
 
-    -   Change the **Mode** to the formula below.
+	- Set the Item value to the formula below.
 
-               TextMode.MultiLine
+    'Inspection List'.Selected
 
-23.  Save your work.
+    ![Set form item value - screenshot](M01L03/Static/Mod_03_Canvas_App_image34.png)
 
-Task \#5: Submit the Inspection Result
---------------------------------------
+5. Edit Inspection Form fields. This adds the data cards for fields by default, but you can add/remove the data cards as:
 
-1.  Add submit button to the details screen.
+	- Select the **Inspection Form**.
 
-    -   Select the **DetailsScreen**. Make sure that you have not selected the
-        Form.
+	- Go to the **Properties** pane and click **Edit Fields**.
 
-    -   Go to the **Insert** tab and click **Button**.
+    ![Edit form fields - screenshot](M01L03/Static/Mod_03_Canvas_App_image35.png)
 
-    -   Rename the button **SubmitButton**.
+	- Click **Add Field**.
 
-    -   Change the Text value of the button to **Submit**.
+	- Select **Name**, **Scheduled** **Date**, **Status Reason**, and **Comments**.
 
-    -   Place the button below the form through drag and drop.
+	- Click **Add**.
 
-2.  Submit the inspection result.
+	- The fields should be ordered as shown in the image below. You can drag/drop to rearrange the fields.
 
-    -   Select the **SubmitButton.**
+    ![Form fields - screenshot](M01L03/Static/Mod_03_Canvas_App_image36.png)
 
-    -   Set the **OnSelect** value of the submit button to the formula below.
-        Remove the false expression and update it. This formula will submit the
-        form and then navigate back to the MainScreen.
+6. Change the Scheduled Date to show date only.
 
-              SubmitForm(InspectionForm);Back(ScreenTransition.UnCoverRight)
+	- Go to the **Tree View** and expand the **Inspection Form**.
 
-3.  Add navigation from the main screen to the details screen.
+	- Select the **Scheduled Date** data card.
 
-    -   Go to the **MainScreen** and select the **InspectionList**.
+	- Go to the **Properties** pane and select the **Advanced** tab.
 
-    -   Set the **OnSelect** property of the **InspectionList** to the formula
-        below. Remove the already existing false expression.
+	- Click **Unlock to change Properties**.
 
-              Navigate(DetailsScreen, ScreenTransition.Cover)
+    ![Unlock properties - screenshot](M01L03/Static/Mod_03_Canvas_App_image37.png)
 
-Task \#6: Test Application
---------------------------
+	- Expand the **Scheduled Date** card.
 
-1.  Start the application
+	- Select **StarVisible**, **ErrorMesage**, **MinuteValue**, **Separator**, and **HourValue**.
 
-    -   Select the **MainScreen** and click **Preview the App**.
+    ![Select card components - screenshot](M01L03/Static/Mod_03_Canvas_App_image38.png)
 
-    -   The application should load and show at least one inspection. Click on
-        the inspection.
+	- Delete the selected controls. When the controls are deleted, you will to see an error message.
 
-    -   The application should navigate to the details screen. Change the
-        **Inspection Result** to **Passed**, provide a comment in the textbox as
-        “Frame Inspection was completed.”, and click **Submit**.
+    ![Delete card components - screenshot](M01L03/Static/Mod_03_Canvas_App_image39.png)
 
-    -   The inspection should be submitted, and the application should navigate
-        back to the MainScreen. Click Close.
+	- Select the **Scheduled Date** DataCard.
 
-2.  Save and publish the application
+	- Go to formula bar and select **Update**.
 
-    -   Click **File** and then click **Save**.
+    ![Select update property - screenshot](M01L03/Static/Mod_03_Canvas_App_image40.png)
 
-    -   Click Publish.
+	- Remove everything after the **SelectedDate**. This should remove the error message from the app.
 
-    -   Click **Publish this Version**.
+    ![Edit formula - screenshot](M01L03/Static/Mod_03_Canvas_App_image41.png)
 
-    -   Close the **Designer** browser window or tab.
+7. Make the Name and Scheduled Date fields read-only
 
-    -   Click **Leave** if prompted when tried to close the browser window.
+	- Select the **Inspection Form**.
 
-    -   Navigate back to the previous window and Click **Done**.
+	- Go to the **Properties** pane and click **Edit Fields**.
 
-3.  Confirm the inspection record was updated
+	- Expand the **Name** field.
 
-    -   Select **Apps** and click to open the **Permit Management Application**.
+    ![Expand field - screenshot](M01L03/Static/Mod_03_Canvas_App_image42.png)
 
-    -   Select **Inspections** and click to open the **Framing Inspection**.
+	- Click on the **Control Type** dropdown and select **View Text**.
 
-    -   The **Status Reason** of the inspection should be **Passed,** and the
-        comment should be updated to the comment you provided.
+    ![Change control type - screenshot](M01L03/Static/Mod_03_Canvas_App_image43.png)
 
-    -   Close the **Permit Management** application.
+	- Expand the **Scheduled Date** field. Observe the change.
 
-Exercise \#2: Export/Import Solution
-====================================
+	- Notice we cannot change this the same way because we’ve customized it. From the Tree View select **DateValue** control inside the **Scheduled Date** Datacard and go to the **Advanced tab** of the **Properties pane**.
 
-**Objective:** In this exercise, you will export the solution you created in the
-development environment and import it to the production environment.
+    ![Advanced properties - screenshot](M01L03/Static/Mod_03_Canvas_App_image44.png)
 
-Task \#1: Export solution.
---------------------------
+	- Search for **DisplayMode** property and remove the existing formula and replace it with the following:  
+‎
 
-1.  Sign in to <https://make.powerapps.com>
+    DisplayMode.View
+    
+![Display mode - screenshot](M01L03/Static/Mod_03_Canvas_App_image45.png)
 
-2.  Make sure you have your **Dev** environment selected.
+8. Change the Status Reason label.
 
-3.  Select **Solutions** and select the **Permit Management** solution.
+	- Select the **Status Reason data card**.
 
-4.  Click **Solution Checker** and select **Run**.
+	- Go to the **Properties** pane and the Advanced tab, click **Unlock to Change properties.**
 
-5.  **Note**: in some environments, you may be prompted to first install
-    Solution checker. When **Install** is selected, this will open a new window.
-    Follow the steps. It might take a few minutes to install the Solution
-    checker and you will have to refresh the PowerApps page after the
-    installation is complete. You should be able to see **Run** option now.
+	- Change the **DisplayName** to **Inspection** **Result**.
 
-6.  Click on Run and wait for the run to complete. You can see the status of the Solution Checker in the upper right corner.
+    ![Change display name - screenshot](M01L03/Static/Mod_03_Canvas_App_image46.png)
 
-7.  Click on the **... (More Commands)** of the **Permit Management** solution.
+9. Resize the Comments data card.
 
-8.  Click Solution Checker and select View Results.
+	- Select the **Comments** data card.
 
-9.  You will see several issues reported.
+	- Click and drag the right edge to the far right of the screen.
 
-10. To resolve the issues, follow these steps:
+    ![Change data card width - screenshot](M01L03/Static/Mod_03_Canvas_App_image47.png)
 
-11. Select **Apps**
+	- Go to the **Advanced** tab of **Properties** pane and click **Unlock to change properties**.
 
-12. Click … next to **Inspector** app and select **Edit**
+	- Set the **Height** value to **300**.
 
-13. Click **App checked** icon on the toolbar
+	- Select the **DataCardValue** control.
 
-14. Select **Recheck All**
+    ![Select data card - screenshot](M01L03/Static/Mod_03_Canvas_App_image48.png)
 
-15. Expand **Missing accessible label** node
+	- Set the **Height** value to **300**.
 
-16. Select an issue. This will open the screen with the control and prompt to
-    enter **AccessibleLabel** property.
+	- Change the **Mode** to the formula below.
 
-17. Enter text value as appropriate
+    TextMode.MultiLine
 
-18. Repeat the process for all controls with missing accessible labels
+    ![Change mode - screenshot](M01L03/Static/Mod_03_Canvas_App_image49.png)
 
-19. Expand **Missing tab stop** node
+10. Make sure your form looks like the image below. Save your work.
 
-20. Select control, enter a value for the **TabIndex**, e.g. 0
+    ![Form layout - screenshot](M01L03/Static/Mod_03_Canvas_App_image50.png)
 
-21. **Tips** node may contain the following message:
-    “Use another method instead of HTML, or remove the HTML from this element.”
+ 
 
-22. This message is related to Map component we imported as part of the
-    component bundle. This component can be safely deleted as it’s not used by
-    the app.
+## Task #5: Submit the Inspection Result
 
-23. Fix other app issues as appropriate
+1. Add submit button to the details screen.
 
-24. Click **File** and then click **Save**.
+	- Select the **Details Screen**. Make sure that you have selected the screen and not selected the Edit Form.
 
-25. Click **Publish**.
+	- Go to the **Insert** tab and click **Button**.
 
-26. Switch to <https://make.powerapps.com/>
+    ![Add button - screenshot](M01L03/Static/Mod_03_Canvas_App_image51.png)
 
-27. Select **Solutions** then select **Permit Management** solution
+	- Rename the button **Submit Button**.
 
-28. Click **Solution checker** then select **Run** and wait for the run to
-    complete.
+	- Change the Text value of the button to **Submit**.
 
-29. There should be zero issues.
+	- Place the button below the form through drag and drop.
 
-30. Select **Solutions** and click to open the **Permit Management** solution.
+    ![Form layout - screenshot](M01L03/Static/Mod_03_Canvas_App_image52.png)
 
-31. Click **Export**.
+2. Submit the inspection result.
 
-32. Click **Publish** and wait for the publishing to complete.
+	- Select the **Submit Button.**
 
-33. Click **Next**.
+	- Set the **OnSelect** value of the submit button to the formula below. Remove the false expression and update it. This formula will submit the form and then navigate back to the MainScreen.
 
-34. Select **Managed** and click **Export**.
+    SubmitForm('Inspection Form');Back(ScreenTransition.UnCoverRight)
 
-35. The file will download.
+    ![submit formula - screenshot](M01L03/Static/Mod_03_Canvas_App_image53.png)
 
-36. Save the solution on your machine.
+3. Add navigation from the main screen to the details screen.
 
-37. Click **Export** again.
+	- Go to the **Main Screen** and select the **Inspection List**.
 
-38. Click **Next**.
+	- Set the **OnSelect** property of the **Inspection List** to the formula below. Remove the already existing false expression.
 
-39. Edit the version number to match the Managed solution you just exported,
-    select **Unmanaged** and click **Export**.
+    Navigate('Details Screen', ScreenTransition.Cover)
 
-40. Save the unmanaged solution on your machine.
+ 
 
-Task \#2: Import solution.
---------------------------
+ 
 
-1.  Sign in to <https://make.powerapps.com>
+## Task #6: Test Application
 
-2.  Make sure you have your **Prod** environment selected.
+1. Start the application
 
-3.  Select **Solutions** and click **Import**.
+	- Select the **Main Screen** and click **Preview the App**.
 
-4.  Click **Browse**.
+    ![Preview application - screenshot](M01L03/Static/Mod_03_Canvas_App_image54.png)
 
-5.  Select the **Managed** solution you exported and click **Open**.
+	- The application should load and show at least one inspection. Click on the inspection.
 
-6.  Click **Next**.
+    ![Select a record - screenshot](M01L03/Static/Mod_03_Canvas_App_image55.png)
 
-7.  Click **Import** and this will open a new window to track the import status.
+	- The application should navigate to the details screen. Change the **Inspection Result** to **Passed**, provide a comment in the textbox as “Framing inspection was completed.”, and click **Submit**.
 
-8.  Wait for import to complete and click **Close**.
+    ![Submit changes - screenshot](M01L03/Static/Mod_03_Canvas_App_image56.png)
 
-9.  Navigate to both the model driven and canvas apps you’ve created and add a
-    few records to test the apps.
+	- The inspection should be submitted, and the application should navigate back to the MainScreen. Click Close.
+
+     ![Close preview - screenshot](M01L03/Static/Mod_03_Canvas_App_image57.png)
+
+ 
+
+2. Save and publish the application
+
+	- Click **File** and then click **Save**.
+
+	- Click **Publish**.
+
+    ![Publish application - screenshot](M01L03/Static/Mod_03_Canvas_App_image58.png)
+
+	- Click **Publish this Version**.
+
+	- Click **Close**.
+
+    ![Close button - screenshot](M01L03/Static/Mod_03_Canvas_App_image59.png)
+
+	- Close the **Designer** browser window or tab.
+
+	- Click **Leave** if prompted when trying to close the browser window.
+
+ 
+
+3. Confirm the inspection record was updated
+
+	- Navigate to [Power Apps maker portal](https://make.powerapps.com/)
+
+	- Select your **Dev environment.**
+
+	- Select **Apps** and click to open the **Permit Management Application**.
+
+    ![Open application - screenshot](M01L03/Static/Mod_03_Canvas_App_image60.png)
+
+	- Select **Inspections** and click to open the **Framing Inspection**.
+
+    ![Open record - screenshot](M01L03/Static/Mod_03_Canvas_App_image61.png)
+
+	- The **Status Reason** of the inspection should be **Passed,** and the comment should be updated to the comment you provided.
+
+    ![Updated record - screenshot](M01L03/Static/Mod_03_Canvas_App_image62.png)
+
+	- Close the **Permit Management** application.
+
+  
+‎ 
+
+# Exercise #2: Export/Import Solution
+
+**Objective:** In this exercise, you will export the solution you created in the development environment and import it to the production environment.
+
+## Task #1: Export solution.
+
+1. Select the Permit Management solution.
+
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/) 
+
+	- Make sure you have your **Dev** environment selected.
+
+	- Select **Solutions** and select the **Permit Management** solution.
+
+    ![Select solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image63.png)
+
+2. Run solution checker.
+
+	- Click **Solution Checker** and select **Run**.
+
+    ![Run solution checker - screenshot](M01L03/Static/Mod_03_Canvas_App_image64.png)
+
+	- Wait for the run to complete.
+
+    **Note:** At the creation of this lab, the solution checker did not complete successfully. If you get an error with the message “Couldn’t be complete” skip to step 3.
+
+    ![Solution checker status - screenshot](M01L03/Static/Mod_03_Canvas_App_image65.png)
+
+	- Click on the More **Commands** of the **Permit Management** solution.
+
+    ![More commands - screenshot](M01L03/Static/Mod_03_Canvas_App_image66.png)
+
+	- Click Solution Checker and select View Results.
+
+    ![View check result - screenshot](M01L03/Static/Mod_03_Canvas_App_image67.png)
+
+- You will see several issues reported
+
+    ![Solution checker results - screenshot](M01L03/Static/Mod_03_Canvas_App_image68.png)
+
+- To resolve the issues, follow these steps:
+
+	- Select **Apps**
+
+	- Click … next to **Inspector** app and select **Edit**
+
+	- Click **App checked** icon on the toolbar 
+
+    ![Solution checker icon - screenshot](M01L03/Static/Mod_03_Canvas_App_image69.png)
+
+- Select **Recheck All**
+
+- Expand **Missing accessible label** node
+
+- Select an issue. This will open the screen with the control and prompt to enter **AccessibleLabel** property.
+
+- Enter text value as appropriate
+
+    ![Accessibility label - screenshot](M01L03/Static/Mod_03_Canvas_App_image70.png)
+
+	- Repeat the process for all controls with missing accessible labels
+
+	- Expand **Missing tab stop** node
+
+	- Select control, enter a value for the **TabIndex**, e.g. 0
+
+	- **Tips** node may contain the following message  
+‎“Use another method instead of HTML, or remove the HTML from this element.”
+
+	- This message is related to Map component we imported as part of the component bundle. This component can be safely deleted as it’s not used by the app.
+
+	- Fix other app issues as appropriate.
+
+- Click **File** and then click **Save**.
+
+- Click **Publish**.
+
+- Switch to [Power Apps maker portal](https://make.powerapps.com/) 
+
+- Select **Solutions** then select **Permit Management** solution 
+
+- Click **Solution checker** then select **Run** and wait for the run to complete.
+
+- There should be zero issues.
+
+    ![Solution checker with zero issues result - screenshot](M01L03/Static/Mod_03_Canvas_App_image71.png)
+
+3. Export managed solution
+
+	- Select **Solutions** and click to open the **Permit Management** solution.
+
+	- Click **Export**.
+
+    ![Export solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image72.png)
+
+	- Click **Publish** and wait for the publishing to complete.
+
+    ![Publish solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image73.png)
+
+	- Click **Next**.
+
+	- Select **Managed** and click **Export**.
+
+    ![Export solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image74.png)
+
+	- Save the solution on your machine.
+
+4. Export unmanaged solution
+
+	- Click **Export** again.
+
+	- Click **Next**.
+
+	- Edit the version number to match the Managed solution you just exported, select **Unmanaged** and click **Export**.  
+‎
+
+    ![Export unmanaged solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image75.png)
+
+	- Save the unmanaged solution on your machine.
+
+ 
+
+## Task #2: Import solution.
+
+1. Open the Permit Management solution.
+
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/) 
+
+	- Make sure you have your **Prod** environment selected.
+    **Note** If you are using the community plan environment as instructed (e.g: [username]'s Environment), you may need to create a data base before you proceed to the next step.
+
+2. Import solution
+
+	- Select **Solutions** and click **Import**.
+
+    ![Import solution - screenshot](M01L03/Static/Mod_03_Canvas_App_image76.png)
+
+	- Click **Browse**.
+
+	- Select the **Managed** solution you exported and click **Open**.
+
+    ![Select solution file - screenshot](M01L03/Static/Mod_03_Canvas_App_image77.png)
+
+	- Click **Next**.
+
+	- Click **Import** and this will open a new window to track the import status.
+
+	- Wait for import to complete and click **Close**.
+
+	- Navigate to both the model driven and canvas apps you’ve created and add a few records, test the apps.
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 

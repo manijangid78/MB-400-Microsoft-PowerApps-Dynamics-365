@@ -26,7 +26,7 @@ Both will be integrated to the model-driven app for a better user-experience.
 
 The following is what the model-driven app designer looks like when all the customizations are completed:
 
-![Completed sitemap - screenshot](02/Static/Mod_02_Model_Driven_App_image1.png)
+![Completed sitemap - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image1.png)
 
 ## Things to consider before you begin
 
@@ -65,43 +65,43 @@ The following is what the model-driven app designer looks like when all the cust
 
 	- Select the **Forms** tab and click to open the **Main** form. By default, the form has two fields, Name (Primary Field) and Owner.
 
-	![Main entity form - screenshot](02/Static/Mod_02_Model_Driven_App_image2.png)
+	![Main entity form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image2.png)
 
 	- Drag the **Permit Type** field to the form and place it below the **Name** field.
 
-	![Add field to form - screenshot](02/Static/Mod_02_Model_Driven_App_image3.png)
+	![Add field to form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image3.png)
 
-	- Add **Build Site** lookup, **Contact** lookup, **Start Date** and **New Size** to the form. ![Add fields to form - screenshot](02/Static/Mod_02_Model_Driven_App_image4.png)
+	- Add **Build Site** lookup, **Contact** lookup, **Start Date** and **New Size** to the form. ![Add fields to form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image4.png)
 
 	- Drag the **Status Reason** field and drop it in the right side of the form header.
 
- 	![Add field to form header - screenshot](02/Static/Mod_02_Model_Driven_App_image5.png)
+ 	![Add field to form header - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image5.png)
 
 Once the control is dropped, this form will look like:  
-‎	![Form after adding fields - screenshot](02/Static/Mod_02_Model_Driven_App_image6.png)
+‎	![Form after adding fields - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image6.png)
 
 3. Add new tab for **Inspections** to the form.
 
 	- With focus set on the main body of the form (not in the header) click **Add Component**.
 
- 	![Add components to form - screenshot](02/Static/Mod_02_Model_Driven_App_image7.png)
+ 	![Add components to form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image7.png)
 
 	- Select **One Column Tab**.
 
-	![Add one column tab to form - screenshot](02/Static/Mod_02_Model_Driven_App_image8.png)
+	![Add one column tab to form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image8.png)
 
 	- Select the new tab you added.
 
 	- Go to the **Properties** pane, change the **Tab Label** to **Inspections** and the **Name** to **inspectionsTab**.  
 ‎
 
-	![Tab properties - screenshot](02/Static/Mod_02_Model_Driven_App_image9.png)
+	![Tab properties - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image9.png)
 
 4. Steps to add Sub-Grid to the Permit form.
 
 	- Select the **Inspections** tab. Make sure that you have selected the whole Tab and not just a section.
 
-	![Select tab - screenshot](02/Static/Mod_02_Model_Driven_App_image10.png)
+	![Select tab - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image10.png)
 
 	- Click **Add Component**.
 
@@ -109,23 +109,23 @@ Once the control is dropped, this form will look like:
 
 	- Check the **Show** **Related Records** checkbox, select **Inspections** for **Entity**, select **Active** **Inspections** for **Default View** and click **Done**.
 
-	![Add sub-grid - screenshot](02/Static/Mod_02_Model_Driven_App_image11.png)
+	![Add sub-grid - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image11.png)
 
 5. Edit Sub-Grid properties.
 
 	- Go to the sub-grid properties pane and change the Label to **Inspections**.
 
-	![Sub-grid properties - screenshot ](02/Static/Mod_02_Model_Driven_App_image12.png)
+	![Sub-grid properties - screenshot ](M01L02/Static/Mod_02_Model_Driven_App_image12.png)
 
 6. Steps to hide the section label
 
 	- Click to select the section.
 
-	![Select section - screenshot](02/Static/Mod_02_Model_Driven_App_image13.png)
+	![Select section - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image13.png)
 
 	- Go to the **Properties** pane and check the **Hide Label** checkbox.
 
-	![Hide section label - screenshot](02/Static/Mod_02_Model_Driven_App_image14.png)
+	![Hide section label - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image14.png)
 
 7. Click **Save** and wait for the save to complete.
 
@@ -137,11 +137,11 @@ Once the control is dropped, this form will look like:
 
 	- Select the **Views** tab and click to open the **Active Permits** view.
 
-	![Open view for edit - screenshot](02/Static/Mod_02_Model_Driven_App_image15.png)
+	![Open view for edit - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image15.png)
 
 	- Drag the **Build Site** field and drop it between the **Name** and **Created On** fields.
 
-	![Add column to view - screenshot](02/Static/Mod_02_Model_Driven_App_image16.png)
+	![Add column to view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image16.png)
 
 	- Click on the **Permit Type** field. The Permit Type field will be added to the view.
 
@@ -149,7 +149,7 @@ Once the control is dropped, this form will look like:
 
 	- Go to the view designer and click on the chevron icon of the **Created On** column.
 
-	![Edit column - screenshot](02/Static/Mod_02_Model_Driven_App_image17.png)
+	![Edit column - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image17.png)
 
 	- Click **Remove**. **Created On** field will now be removed from the view.
 
@@ -175,7 +175,7 @@ Once the control is dropped, this form will look like:
 
 	- Add **City**, **State/Province**, **Zip/Postal Code**, and **Country Region** fields to the form between **Street Address** and **Owner**.
 
-	![Build site form - screenshot](02/Static/Mod_02_Model_Driven_App_image18.png)
+	![Build site form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image18.png)
 
 3. Click **Save** and wait until the changes are saved.
 
@@ -191,7 +191,7 @@ Once the control is dropped, this form will look like:
 
 	- Remove **Created On** from the view by selecting **Remove** from the options in field Chevron.
 
-	![Active build sites view - screenshot ](02/Static/Mod_02_Model_Driven_App_image19.png)
+	![Active build sites view - screenshot ](M01L02/Static/Mod_02_Model_Driven_App_image19.png)
 
 7. Click **Save** and wait until the changes are saved.
 
@@ -219,11 +219,11 @@ Once the control is dropped, this form will look like:
 
 	- Drag the **Status Reason** field **Comments** and drop it in the right side of the form header.
 
-	![Add field to form header - screenshot](02/Static/Mod_02_Model_Driven_App_image20.png)
+	![Add field to form header - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image20.png)
 
 	- The form should now look like the image below. 
 
-	![inspection form - screenshot](02/Static/Mod_02_Model_Driven_App_image21.png)
+	![inspection form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image21.png)
 
 3. Click **Save** and wait until the changes are saved.
 
@@ -239,7 +239,7 @@ Once the control is dropped, this form will look like:
 
 	- Remove **Created On** from the view by selecting the chevron on the field and select **Remove**.
 
-	![Active inspections view - screenshot](02/Static/Mod_02_Model_Driven_App_image22.png)
+	![Active inspections view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image22.png)
 
 7. Click **Save** and wait until the changes are saved.
 
@@ -253,19 +253,19 @@ Once the control is dropped, this form will look like:
 
 	- Click **+ Add View**. This will open a new window to create View.
 
-	![Create new view - screenshot](02/Static/Mod_02_Model_Driven_App_image23.png)
+	![Create new view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image23.png)
 
 	- Enter **Inspector View** for **Name** and click **Create**.
 
 	- Add **Inspection Type**, **Permit**, **Scheduled Date**, and **Sequence** fields to the view.
 
-	![Inspection view - screenshot](02/Static/Mod_02_Model_Driven_App_image24.png)
+	![Inspection view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image24.png)
 
 11. Sort the Inspector View by the sequence.
 
 	- Go to the view properties pane and click **Sort By**.
 
-	![Sort view - screenshot](02/Static/Mod_02_Model_Driven_App_image25.png)
+	![Sort view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image25.png)
 
 	- Select **Sequence**.
 
@@ -273,19 +273,19 @@ Once the control is dropped, this form will look like:
 
 	- Go to the view properties pane and click **Edit Filter**. This will open a new pop-up on the right side of the window.
 
-	![Filter view - screenshot](02/Static/Mod_02_Model_Driven_App_image26.png)
+	![Filter view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image26.png)
 
 	- Click **Add** and select **Add Row**.
 
-	![Add filter - screenshot](02/Static/Mod_02_Model_Driven_App_image27.png)
+	![Add filter - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image27.png)
 
 	- Set the filter property by Selecting **Status Reason** in first dropdown and **Pending** in the third dropdown**.** Now, click **Add** and select **Add Row** again.
 
-	![Filter properties - screenshot](02/Static/Mod_02_Model_Driven_App_image28.png)
+	![Filter properties - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image28.png)
 
 	- To set the filter property select **Owner** field in the first dropdown and Equals current user in second dropdown and click **OK**.
 
-	![View filters - screenshot](02/Static/Mod_02_Model_Driven_App_image29.png)
+	![View filters - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image29.png)
 
 13. Click **Save** and wait until the changes are saved.
 
@@ -317,7 +317,7 @@ Once the control is dropped, this form will look like:
 
 	- Add **Require Inspections** and **Require Size** fields to the form between **Name** and **Owner**.
 
-	![Permit type form - screenshot](02/Static/Mod_02_Model_Driven_App_image30.png)
+	![Permit type form - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image30.png)
 
 	- Click **Save** and wait until the changes are saved.
 
@@ -333,7 +333,7 @@ Once the control is dropped, this form will look like:
 
 	- Remove **Created On** from the view but selecting the chevron on the field and select **Remove**.
 
-	![Active permit types view - screenshot](02/Static/Mod_02_Model_Driven_App_image31.png)
+	![Active permit types view - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image31.png)
 
 	- Click **Save** and wait until the changes are saved.
 
@@ -362,7 +362,7 @@ Once the control is dropped, this form will look like:
 
 	- Click **New** and select **App | Model-Driven App**. This will open a new Window.
 
-	![Create model-driven application - screenshot](02/Static/Mod_02_Model_Driven_App_image32.png)
+	![Create model-driven application - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image32.png)
 
 	- Enter **Permit Management** for **Name** and click **Done**.
 
@@ -370,7 +370,7 @@ Once the control is dropped, this form will look like:
 
 	- Click **Edit Site map.**
 
-	![Edit sitemap - screenshot](02/Static/Mod_02_Model_Driven_App_image33.png)
+	![Edit sitemap - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image33.png)
 
 4. Edit the default titles
 
@@ -384,7 +384,7 @@ Once the control is dropped, this form will look like:
 
  
 
-	![Sitemap area and group - screenshot](02/Static/Mod_02_Model_Driven_App_image34.png)
+	![Sitemap area and group - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image34.png)
 
 5. Add the Permit entity to the sitemap
 
@@ -394,13 +394,13 @@ Once the control is dropped, this form will look like:
 
 	- Search for **Permit** entity from the dropdown for **Entity**.
 
-	![Subarea properties - screenshot](02/Static/Mod_02_Model_Driven_App_image35.png)
+	![Subarea properties - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image35.png)
 
 6. Add the Inspection entity to the sitemap
 
 	- Select **Permits** group and click **Add**.
 
-	![Add component - screenshot](02/Static/Mod_02_Model_Driven_App_image36.png)
+	![Add component - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image36.png)
 
 	- Select **Subarea**.
 
@@ -422,7 +422,7 @@ Once the control is dropped, this form will look like:
 
 	- Select the **Building Dept.** area and click **Add.**
 
-	![Add component to area - screenshot](02/Static/Mod_02_Model_Driven_App_image37.png)
+	![Add component to area - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image37.png)
 
 	- Click **Add** and select **Group**.
 
@@ -452,7 +452,7 @@ Once the control is dropped, this form will look like:
 
 11. The sitemap should now look like the image below.
 
-	![Sitemap - screenshot](02/Static/Mod_02_Model_Driven_App_image38.png)
+	![Sitemap - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image38.png)
 
 12. Click **Save**, this will show the loading screen while the changes are getting saved.
 
@@ -463,7 +463,7 @@ Once the control is dropped, this form will look like:
 15. You will see the assets for the entities that were added to the sitemap are now all in the application.
 
   
-	‎![Application designer - screenshot](02/Static/Mod_02_Model_Driven_App_image39.png)
+	‎![Application designer - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image39.png)
 
 16. Click **Save** to save the application.
 
@@ -479,7 +479,7 @@ Once the control is dropped, this form will look like:
 
 22. Select **Apps** and your application should now be listed in the Recent Apps.
 
-	![New application in the app list - screenshot](02/Static/Mod_02_Model_Driven_App_image40.png)
+	![New application in the app list - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image40.png)
 
  
 
@@ -492,7 +492,7 @@ Once the control is dropped, this form will look like:
 2. Create new Contact record
 
 	- Select **Contacts**  
-‎	![Contacts - screenshot](02/Static/Mod_02_Model_Driven_App_image41.png)  
+‎	![Contacts - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image41.png)  
 ‎
 
 	- Click **New** from the top menu.
@@ -501,11 +501,11 @@ Once the control is dropped, this form will look like:
 
 	- Click **Save and Close**.
 
-	![Create contact record - screenshot](02/Static/Mod_02_Model_Driven_App_image42.png)
+	![Create contact record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image42.png)
 
 	- You should now see the created contact on the **Active Contacts** view.
 
-	![Created contact record - screenshot](02/Static/Mod_02_Model_Driven_App_image43.png)
+	![Created contact record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image43.png)
 
 3. Create new Build Site record
 
@@ -525,7 +525,7 @@ Country/Region: USA
 
 - Click **Save and Close** and this will show the newly created record on the Active Build Sites View.
 
-	![Created build site record - screenshot](02/Static/Mod_02_Model_Driven_App_image44.png)
+	![Created build site record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image44.png)
 
 4. Create new Permit Type record
 
@@ -535,7 +535,7 @@ Country/Region: USA
 
 	- Provide **Name** as **New Construction** and click **Save and Close**. This will create the record and you should be able to see it on the Active Permit Type View.
 
-	![New permit type record - screenshot](02/Static/Mod_02_Model_Driven_App_image45.png)
+	![New permit type record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image45.png)
 
 5. Create new Permit record
 
@@ -547,7 +547,7 @@ Country/Region: USA
 
 	- Select a future date for the **Start Date** and click **Save**.
 
-	![New permit record - screenshot](02/Static/Mod_02_Model_Driven_App_image46.png)
+	![New permit record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image46.png)
 
 6. Create new Inspection record
 
@@ -555,17 +555,17 @@ Country/Region: USA
 
 	- Click **+ New Inspections**.
 
-	![Add new inspection - screenshot](02/Static/Mod_02_Model_Driven_App_image47.png)
+	![Add new inspection - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image47.png)
 
 	- Provide **Name** as **Framing Inspections**, select **Initial Inspection** from the dropdown for **Inspection Type**, and select future date for **Scheduled Date**.
 
 	- Click **Save and Close.**
 
-	![New inspection record - screenshot](02/Static/Mod_02_Model_Driven_App_image48.png)
+	![New inspection record - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image48.png)
 
 	- The **Inspection** record should now show on the **Permit** sub-grid.
 
-	![Inspect sub-grid - screenshot](02/Static/Mod_02_Model_Driven_App_image49.png)
+	![Inspect sub-grid - screenshot](M01L02/Static/Mod_02_Model_Driven_App_image49.png)
 
 7. You may add more test records.
 
