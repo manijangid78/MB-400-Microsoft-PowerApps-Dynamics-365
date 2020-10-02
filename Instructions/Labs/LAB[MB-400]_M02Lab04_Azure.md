@@ -39,7 +39,7 @@ Deploy the Azure Function
 
 1. Navigate to Azure Active Directory
 
-	- Sign in to [Azure Portal](https://portal.azure.com/).
+- Sign in to [Azure Portal](https://portal.azure.com/).
 
 **Note:** You must be logged in with an organization account in the same tenant as your CDS Environment. This does **NOT** have to be the account that has your Azure subscription.
 
