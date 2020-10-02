@@ -1,4 +1,4 @@
-MB400: Microsoft Power Apps Developer
+MB400: Microsoft Power Apps + Dynamics 365 Developer
 
 ## Module 1, Lab 01 – Data Modeling
 
