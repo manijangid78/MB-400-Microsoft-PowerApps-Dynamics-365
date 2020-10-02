@@ -133,7 +133,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Change the **Width** vale of the **Main Header** to the formula below.
 
-    Parent.Width
+            Parent.Width
 
     ![Change width value - screenshot](M01L03/Static/Mod_03_Canvas_App_image13.png)
 
@@ -209,7 +209,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Change the **Text** property of the control to the formula below.
 
-    DateValue(Text(ThisItem.'Scheduled Date'),"en")
+            DateValue(Text(ThisItem.'Scheduled Date'),"en")
 
 6. Resize the Gallery
 
@@ -217,19 +217,19 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Select **Width** property from the formula dropdown and enter the formula below.
 
-    Parent.Width
+            Parent.Width
 
 	- Select **Height** property and set it to the formula below.
 
-    Parent.Height - ('Main Header'.Height*2)
+            Parent.Height - ('Main Header'.Height*2)
 
 	- Select the Y property from the dropdown and set it to formula below.
 
-    'Main Header'.Height
+            'Main Header'.Height
 
 	- Select the X property from the dropdown and set it to formula below.
 
-    'Main Header'.X
+            'Main Header'.X
 
 ![Gallery - screenshot](M01L03/Static/Mod_03_Canvas_App_image25.png)
 
@@ -263,7 +263,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Select the **Text** property of the **Details Header** and set it to formula below.
 
-    'Inspection List'.Selected.Name
+            'Inspection List'.Selected.Name
 
     ![Change text value - screenshot](M01L03/Static/Mod_03_Canvas_App_image30.png)
 
@@ -283,20 +283,21 @@ This second screen lets the inspector update the selected Inspection.
 
 		- Select the **InspectionForm**.
 
-		- Select **Width** property from the formula dropdown and enter the formula below.  
-‎   Parent.Width
+		- Select **Width** property from the formula dropdown and enter the formula below.
+
+                Parent.Width
 
 	- Select **Height** property and set it to the formula below.
 
-    Parent.Height - ('Details Header'.Height*2)
+            Parent.Height - ('Details Header'.Height*2)
 
 	- Select the Y property from the dropdown and set it to formula below.
 
-    'Details Header'.Height
+            'Details Header'.Height
 
 - Select the X property from the dropdown and set it to formula below.
 
-    'Details Header'.X
+        'Details Header'.X
 
 - The form should now look like the image below.
 
@@ -310,7 +311,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Set the Item value to the formula below.
 
-    'Inspection List'.Selected
+            'Inspection List'.Selected
 
     ![Set form item value - screenshot](M01L03/Static/Mod_03_Canvas_App_image34.png)
 
@@ -385,9 +386,9 @@ This second screen lets the inspector update the selected Inspection.
     ![Advanced properties - screenshot](M01L03/Static/Mod_03_Canvas_App_image44.png)
 
 	- Search for **DisplayMode** property and remove the existing formula and replace it with the following:  
-‎
 
-    DisplayMode.View
+
+            DisplayMode.View
     
 ![Display mode - screenshot](M01L03/Static/Mod_03_Canvas_App_image45.png)
 
@@ -421,7 +422,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Change the **Mode** to the formula below.
 
-    TextMode.MultiLine
+            TextMode.MultiLine
 
     ![Change mode - screenshot](M01L03/Static/Mod_03_Canvas_App_image49.png)
 
@@ -465,7 +466,7 @@ This second screen lets the inspector update the selected Inspection.
 
 	- Set the **OnSelect** property of the **Inspection List** to the formula below. Remove the already existing false expression.
 
-    Navigate('Details Screen', ScreenTransition.Cover)
+            Navigate('Details Screen', ScreenTransition.Cover)
 
  
 
