@@ -1,6 +1,6 @@
 MB400: Microsoft Power Apps Developer + Dynamics 365 Developer
 
-## Day 01, Lab 02 – Model driven app
+## Module 01, Lab 02 – Model driven app
 
 # Scenario
 
@@ -26,17 +26,17 @@ Both will be integrated to the model-driven app for a better user-experience.
 
 The following is what the model-driven app designer looks like when all the customizations are completed:
 
-	![Completed sitemap - screenshot](02/Static/Mod_02_Model_Driven_App_image1.png)
+![Completed sitemap - screenshot](02/Static/Mod_02_Model_Driven_App_image1.png)
 
 ## Things to consider before you begin
 
-	- What changes should we make to improve the user experience?
+- What changes should we make to improve the user experience?
 
-	- What should we include in a model-driven app based on the data model we’ve built?
+- What should we include in a model-driven app based on the data model we’ve built?
 
-	- What customizations can be made on the sitemap of a model-driven app?
+- What customizations can be made on the sitemap of a model-driven app?
 
-	- Remember to continue working in your DEVELOPMENT environment. We’ll move everything to production once everything is built and tested.
+- Remember to continue working in your DEVELOPMENT environment. We’ll move everything to production once everything is built and tested.
 
   
 ‎ 
