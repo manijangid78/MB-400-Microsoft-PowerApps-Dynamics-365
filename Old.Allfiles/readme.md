@@ -1,0 +1,1 @@
+All files have moved to individual folders that maps to each lab. You can find it in Instructions/Labs
