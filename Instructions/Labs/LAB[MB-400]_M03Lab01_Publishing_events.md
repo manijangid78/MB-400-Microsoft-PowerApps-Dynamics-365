@@ -1,303 +1,343 @@
----
-lab:
-    title: 'Lab 01: Publishing events externally'
-    module: 'Module 03: Extending the Power Platform user experience'
----
 
-# MB-400: Microsoft PowerApps + Dynamics 365 Developer
-## Module 3, Lab 1 - Publishing events externally
 
-Scenario
-========
+MB400: Microsoft Power Apps + Dynamics 365 Developer
 
-A regional building department issues and tracks permits for new buildings and
-updates for remodeling of existing buildings. Throughout this course you will
-build applications and perform automation to enable the regional building
-department to manage the permitting process. This will be an end-to-end solution
-which will help you understand the overall process flow.
+## Module 03, Lab 01 – Publishing Events Externally
 
-In this lab you will use the event publishing capability of the Common Data
-Service. When a permit results in changing the size of the build site, an
-external taxing authority needs to be notified so they can evaluate if
-additional taxing is required. You will configure CDS to publish permits with
-size changes using the web hook option. To simulate the taxing authority
-receiving the information you will create a simple Azure function to receive the
-post.
+# Scenario
 
-High-level lab steps
-======================
+A regional building department issues and tracks permits for new buildings and updates for remodeling of existing buildings. Throughout this course you will build applications and automation to enable the regional building department to manage the permitting process. This will be an end-to-end solution which will help you understand the overall process flow.
+
+In this lab you will use the event publishing capability of the Common Data Service. When a permit results in changing the size of the build site, an external taxing authority needs to be notified so they can evaluate if additional taxing is required. You will configure Common Data Service to publish permits with size changes using the web hook option. To simulate the taxing authority receiving the information you will create a simple Azure function to receive the post. 
+
+# High-level lab steps
 
 As part of configuring the event publishing, you will complete the following:
 
--   Create an Azure Function to receive the web hook post
+- Create an Azure Function to receive the web hook post
 
--   Configure CDS to publish events using a web hook
+- Configure Common Data Service to publish events using a web hook
 
--   Test publishing of events
+- Test publishing of events
 
-Things to consider before you begin
------------------------------------
+## Things to consider before you begin
 
--   Do we know what events will trigger our web hook?
+- Do we know what events will trigger our web hook?
 
--   Could what we are doing with the web hook, be done using Microsoft Flow?
+- Could what we are doing with the web hook, be done using Power Automate?
 
--   Remember to continue working in your DEVELOPMENT environment. We’ll move
-    everything to production soon.
+- Remember to continue working in your DEVELOPMENT environment. We’ll move everything to production soon.
 
-Exercise \#1: Create an Azure Function
-======================================
+  
+‎ 
 
-**Objective:** In this exercise, you will create an Azure Function that will be
-the endpoint to accept and log incoming web requests.
+# Exercise #1: Create an Azure Function
 
-Task \#1: Create Azure Function App
------------------------------------
+**Objective:** In this exercise, you will create an Azure Function that will be the endpoint to accept and log incoming web requests.
 
-1.  Create new function application
+ 
 
-    -  Sign in to <https://portal.azure.com> and login.
+## Task #1: Create Azure Function App
 
-    -  Select + **Create a Resource**.
+1. Create new function application
 
-    -  Search for Function App and select it.
+	- Sign in to [Azure portal](Azure%20portal) and login.
 
-    -  Click **Create**.
+	- Click **Show portal menu** and select + **Create a Resource**.
 
-    -  Enter your initials plus today’s date for **App Name**, select your
-        **Subscription**, and select **Create New** for **Resource Group**.
+    ![Create new resource - screenshot](M03L01/Static/Mod_01_Web_Hook_image1.png)
 
-    -  Select **Consumption Plan** for **Hosting Plan**, select location in the
-        same region as **CDS**, **Create New Storage**, and click **Create**.
+	- Search for Function App and select it.
 
-    -  Wait for the function app to be created.
+    ![New function app - screenshot](M03L01/Static/Mod_01_Web_Hook_image2.png)
 
-Task \#2: Create an Azure Function
-----------------------------------
+	- Click **Create**.
 
-1.  Create a new function
+    ![Create function app - screenshot](M03L01/Static/Mod_01_Web_Hook_image3.png)
 
-   -  Select **All Resources**, search for the function application you
-        created and open it.
+	- Enter your initials plus today’s date for **App Name**, select your **Subscription**, select **Create New** for **Resource Group**, select **.NET Core** for Runtime Stack, select location in the same region as **CDS**, and click **Review + Create**.
 
-   -  Create new function by selecting the + icon.
+    ![Review/create function app - screenshot](M03L01/Static/Mod_01_Web_Hook_image4.png)
 
-   -  Select **In-Portal** and click **Continue.**
+	- Click **Create** and wait for the deployment to complete.
 
-   -  Select **Webhook + API** and click **Create**.
+## Task #2: Create an Azure Function
 
-2.  Test the function
+1. Create a new function
 
-    -  Click on the **Test** pane. (If you do not see the Test pane on the right side of the screen, you may need to minimize the left menu.)
+	- Click **Go to resource**.
 
-    -  Click **Run**.
+    ![Go to resource - screenshot](M03L01/Static/Mod_01_Web_Hook_image5.png)
 
-    -  You should see **Hello, Azure** in the output.
+	- Select **Functions** and click **+ Add**.
 
-3.  Edit the function
+    ![Add function - screenshot](M03L01/Static/Mod_01_Web_Hook_image6.png)
 
-    -  Identify the following lines in the code and remove them. Do not remove any lines between the following:
+	- Select **HTTP trigger**.
 
-			string name = req.Query["name"];
+    ![HTTP trigger - screenshot](M03L01/Static/Mod_01_Web_Hook_image7.png)
 
-			name = name ?? data?.name;
+	- Click **Create Function** and wait for the function to be created.
 
-			return name != null
-				? (ActionResult) new OkObjectResult($"Hello, {name}")
-				: new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+2. Test the function
 
-	- 	Change the method signature from Task<IActionResult> to void.
-	
-	- 	Add the code below to the function.
-	
-			string indentedJson = JsonConvert.SerializeObject(data, Formatting.Indented);
-			log.LogInformation(indentedJson);
+	- Select **Code + Test**.
 
-	- Click **Save.**
-	
-4.  Remove HTTP output
+    ![Code + Test - screenshot](M03L01/Static/Mod_01_Web_Hook_image8.png)
 
-    -   Select **Integrate**.
+	- Click **Test**/**Run**.
 
-    -   Select the **HTTP Output**.
+    ![Test/run - screenshot](M03L01/Static/Mod_01_Web_Hook_image9.png)
 
-    -   Click **Delete**.
+	- Click **Run**.
 
-    -   Select the function and click **Save** again.
+	- You should see **Hello, Azure** in the output.
 
-5.  Get the function URL
+    ![Function output - screenshot](M03L01/Static/Mod_01_Web_Hook_image10.png)
 
-    -   Click Get Function URL.
+	- Close the test pane.
 
-    -   Click **Copy** and the close the popup.
+ 
 
-    -   Save the **URL** - you will need it in the next exercise.
+3. Edit the function
 
-Exercise \#2: Configure Web Hook
-================================
+	- Replace the Run method with the method below.
 
-Task \#1: Configure publishing to a web hook
---------------------------------------------
+            public static async void Run(HttpRequest req, ILogger log)
+            {
+                log.LogInformation("C# HTTP trigger function processed a request.");
 
-1.  Download the SDK Toolkit. If you already have the Plugin Registration tool
-    from the previous lab you can proceed to step 3 of this task.
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                string indentedJson = JsonConvert.SerializeObject(data, Formatting.Indented);
+                log.LogInformation(indentedJson);
+            }
 
-    -   Navigate to <https://xrm.tools/SDK>
+	- Save your changes.
 
-    -   Click **Download SDK Zip File**.
+    ![Save function - screenshot](M03L01/Static/Mod_01_Web_Hook_image11.png)
 
-    -   Save the zip file on your machine.
+4. Remove HTTP output
 
-    -   Right click on the downloaded **sdk.zip** file and select
-        **Properties**.
+	- Select **Integration**.
 
-    -   Check the **Unblock** checkbox and click Apply.
+    ![Integration - screenshot](M03L01/Static/Mod_01_Web_Hook_image12.png)
 
-    -   Click **OK**.
+	- Select the **HTTP Output**.
 
-    -   Right click on the **sdk.zip** file again and select **Extract All**.
+    ![Outputs - screenshot](M03L01/Static/Mod_01_Web_Hook_image13.png)
 
-    -   Complete extracting.
+	- Click **Delete**.
 
-2.  Start the Plugin Registration Tool
+    ![Delete output - screenshot](M03L01/Static/Mod_01_Web_Hook_image14.png)
 
-    -   Open the **sdk** folder you extracted and click to open the
-        **PluginRegistration** folder.
+	- Click **OK**.
 
-    -   Locate and double click PluginRegistration.exe.
+5. Get the function URL
 
-3.  Create new connection
+	- Select **Overview** and click **Get Function URL**.
 
-    -   Click **Create New Connection**.
+    ![Get function URL - screenshot](M03L01/Static/Mod_01_Web_Hook_image15.png)
 
-    -   Select **Office 365** and check the **Display List of available
-        organization** and **Show Advanced** checkboxes. Select **Online
-        Region** where your organization is located. If you are unsure what
-        region to select, select **Don’t Know**.
+	- Click **Copy** and click OK to close the popup.
 
-    -   Provide your **CDS** credentials and click **Login**.
+    ![Copy function URL - screenshot](M03L01/Static/Mod_01_Web_Hook_image16.png)
 
-    -   Select the **Dev** environment and click **Login**.
+	- Save the **URL**, you will need it in the next exercise.
 
-4.  Register new Web Hook
+# Exercise #2: Configure Web Hook
 
-    -   Click **Register** and select **Register New Web Hook**.
+## Task #1: Configure publishing to a web hook
 
-    -   Enter **NewSize** for **Name**.
+1. Download the SDK Toolkit. If you already have the Plugin Registration tool from the previous lab you can proceed to step three of this task.
 
-    -   Go to the notepad where you saved the function URL and copy everything
-        before the **‘?’**.
+	- Navigate to [https://xrm.tools/SDK](https://xrm.tools/SDK) 
 
-    -   Go back to the **Plugin Registration** tool and paste the **URL** you
-        copied in the **Endpoint URL** field.
+	- Click **Download SDK Zip File**.
 
-    -   Select **WebhookKey** for **Authentication**.
+    ![Download SDK - screenshot](M03L01/Static/Mod_01_Web_Hook_image17.png)
 
-    -   Go back to the notepad and copy the key. The key will be all the text after the **code=**.
+	- Save the zip file on your machine.
 
-    -   Go back to the **Plugin Registration** tool, paste the key you copied in
-        the **Value** field and click **Save**.
+	- Right click on the downloaded **sdk.zip** file and select **Properties**.
 
-5.  Register new step
+    ![File properties - screenshot](M03L01/Static/Mod_01_Web_Hook_image18.png)
 
-    -   Select the **Web Hook** you registered, click **Register** and select
-        **Register New Step**.
+	- Check the **Unblock** checkbox and click Apply.
 
-    -   Select **Update** for **Message**, **contoso_permit** for **Primary Entity**, and click the ellipses in **Filtering Attributes.**
+    ![Unblock file - screenshot](M03L01/Static/Mod_01_Web_Hook_image19.png)
 
-    -   Uncheck all by selecting the checkbox, select **New Size** and click
-        **OK**.
+	- Click **OK**.
 
-    -   Select **Asynchronous** for **Execution Mode** and click **Register New Step**.
+	- Right click on the **sdk.zip** file again and select **Extract All**.
 
-Task \#2: Test the Web Hook
----------------------------
+	- Complete extracting.
 
-1.  Start the Permit Management application
+2. Start the Plugin Registration Tool
 
-    -   Sign in to <https://make.powerapps.com> and make sure you have the
-        **Dev** environment selected.
+	- Open the **sdk** folder you extracted and click to open the **PluginRegistration** folder.
 
-    -   Select Apps and click to open the Permit Management application.
+    ![Plugin registration - screenshot](M03L01/Static/Mod_01_Web_Hook_image20.png)
 
-    -   Select **Permits** and open one of the permit records. Create new if you
-        don’t have a Permit record.
+	- Locate and double click PluginRegistration.exe.
 
-    -   Change the **New Size** to **5000** and **Save**.
+    ![Start plugin registration tool - screenshot ](M03L01/Static/Mod_01_Web_Hook_image21.png)
 
-2.  Check Azure Output
+3. Create new connection
 
-    -   Go back to your **Azure Function**.
+	- Click **Create New Connection**.
 
-    -   Open **Logs**. The Output is a
-        serialized **RemoteExecutionContextobject** object.
+    ![New connection - screenshot ](M03L01/Static/Mod_01_Web_Hook_image22.png)
 
-    -   **Hint**: If the log is not showing in the console (sometimes it
-        happens), click **Monitor** on the left and check execution log, select
-        entry, details will be on the right (could be delayed up to 5 min
-        though)
+	- Select **Office 365** and check the **Display List of available organization** and **Show Advanced** checkboxes. Select **Online Region** where your organization is located. If you are unsure what region to select, select **Don’t Know**.
 
-3.  Confirm the function executes only when the New Size value changes
+	- Provide your **CDS** credentials and click **Login**.  
+‎    ![Login - screenshot](M03L01/Static/Mod_01_Web_Hook_image23.png)
 
-    -   Go back to the **Permit Management** application.
+	- Select the **Dev** environment and click **Login**.
 
-    -   Change the **Start Date** to tomorrow’s date and click **Save**.
+    ![Select environment - screenshot](M03L01/Static/Mod_01_Web_Hook_image24.png)
 
-    -   Go back to the Azure Function and make sure the function did not
-        execute.
+4. Register new Web Hook
 
-Task \#3: Configure an entity image 
-------------------------------------
+	- Click **Register** and select **Register New Web Hook**.
 
-This step allows you to avoid unnecessarily querying CDS and make a request only
-when you need information from the primary entity. It can also be used to get
-the prior value of a field before an update operation.
+    ![Register new web hook - screenshot](M03L01/Static/Mod_01_Web_Hook_image25.png)
 
-1.  Register New Image
+	- Enter **NewSize** for **Name**.
 
-    -   Go back to the **Plugin Registration** tool.
+	- Go to the notepad where you saved the function URL and copy everything before the **‘?’**.
 
-    -   Select the **NewSize** step you created, click **Register** and select
-        **Register New Image**.
+    ![Copy URL - screenshot](M03L01/Static/Mod_01_Web_Hook_image26.png)
 
-    -   Check both Pre and Post images checkboxes.
+	- Go back to the **Plugin Registration** tool and paste the **URL** you copied in the **Endpoint URL** field.
 
-    -   Enter **Permit Image** for **Name**, **PermitImage** for **Entity
-        Alias**, and click on the **Parameters** button.
+    ![Paste URL - screenshot ](M03L01/Static/Mod_01_Web_Hook_image27.png)
 
-    -   Select **Build Site**, **Contact**, **Name**, **New Size**, **Permit
-        Type**, and **Start Date**, and then click **OK**.
+	- Select **WebhookKey** for **Authentication**.
 
-    -   Click **Register Image**.
+	- Go back to the notepad and copy the key.
 
-2.  Clear Azure log
+    ![Copy key - screenshot](M03L01/Static/Mod_01_Web_Hook_image28.png)
 
-    -   Go back to the **Azure Function.**
+	- Go back to the **Plugin Registration** tool, paste the key you copied in the **Value** field and click **Save**.
 
-    -   Clear **Logs**.
+    ![Paste key value and save - screenshot](M03L01/Static/Mod_01_Web_Hook_image29.png)
 
-3.  Update Permit record
+5. Register new step
 
-    -   Go to the **Permit Management** application.
+	- Select the **Web Hook** you registered, click **Register** and select **Register New Step**.
 
-    -   Select **Permits** and open one of the **Permit** records.
+    ![Register new step - screenshot](M03L01/Static/Mod_01_Web_Hook_image30.png)
 
-    -   Change the New Size to **4000** and click **Save**
+	- Select **Update** for **Message**, **contoso_permit** for **Primary Entity**, and click **Filtering Attributes.**
 
-4.  Check Azure logs
+    ![Filtering attributes - screenshot](M03L01/Static/Mod_01_Web_Hook_image31.png)
 
-    -   Go back to the **Azure Function**.
+	- Select only **New Size** and click **OK**.
 
-    -   Expand the log pane.
+    ![Select attribute - screenshot](M03L01/Static/Mod_01_Web_Hook_image32.png)
 
-    -   The logs should now show both **Pre** and **Post** entity images. In
-        this case you should see the old value **5000** in **Pre** image and the
-        new value **4000** in the **Post** image.
+	- Select **Asynchronous** for **Execution Mode** and click **Register New Step**.
 
-    -   **Note: **technically, we have the data in the Target object already.
-        However, if there are plugins modifying the data, PostImage will contain
-        the copy as recorded in CDS while Target contains the data as submitted
-        on Save. In addition to that, preimage contains data before the save
-        operation took place.
+    ![Register new step - screenshot](M03L01/Static/Mod_01_Web_Hook_image33.png)
 
+## Task #2: Test the Web Hook
 
+1. Start the Permit Management application
+
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/) and make sure you have the **Dev** environment selected.
+
+	- Select Apps and click to open the Permit Management application.
+
+    ![Start application - screenshot](M03L01/Static/Mod_01_Web_Hook_image34.png)
+
+	- Select **Permits** and open one of the permit records. Create new if you don’t have a Permit record.
+
+    ![Open permit record - screenshot](M03L01/Static/Mod_01_Web_Hook_image35.png)
+
+	- Change the **New Size** to **5000** and **Save**.
+
+    ![Change size and save - screenshot](M03L01/Static/Mod_01_Web_Hook_image36.png)
+
+2. Check Azure Output
+
+	- Go back to your **Azure Function**.
+
+	- Select **Code + Test**.
+
+	- Show **Logs**.
+
+    ![Show logs - screenshot](M03L01/Static/Mod_01_Web_Hook_image37.png)
+
+	- You should see logs like the image below. The Output is a serialized **RemoteExecutionContextobject** object
+
+    ![Function output - screenshot](M03L01/Static/Mod_01_Web_Hook_image38.png)
+
+**Hint**: If the log is not showing in the console (sometimes this happens), click **Monitor** on the left and check execution log. Select entry, details will be on the right (this could be delayed up to a few minutes).
+
+6. Confirm the function executes only when the New Size value changes
+
+	- Go back to the **Permit Management** application.
+
+	- Change the **Start Date** to tomorrow’s date and click **Save**.
+
+    ![Update record and save - screenshot](M03L01/Static/Mod_01_Web_Hook_image39.png)
+
+Go back to the Azure Function and make sure the function did not execute.
+
+## Task #3: Configure an entity image 
+
+This step allows you to avoid unnecessarily querying CDS and make a request only when you need information from the primary entity. It can also be used to get the prior value of a field before an update operation.
+
+1. Register New Image
+
+	- Go back to the **Plugin Registration** tool.
+
+	- Select the **NewSize** step you created, click **Register** and select **Register New Image**.
+
+    ![Register new image - screenshot](M03L01/Static/Mod_01_Web_Hook_image40.png)
+
+	- Check both **Pre** and **Post** images checkboxes.
+
+	- Enter **Permit Image** for **Name**, **PermitImage** for **Entity Alias**, and click on the **Parameters** button.
+
+    ![Image type information - screenshot](M03L01/Static/Mod_01_Web_Hook_image41.png)
+
+	- Select **Build Site**, **Contact**, **Name**, **New Size**, **Permit Type**, and **Start Date**, and then click **OK**.
+
+    ![Select attributes - screenshot](M03L01/Static/Mod_01_Web_Hook_image42.png)
+
+	- Click **Register Image**.
+
+    ![Register image - screenshot](M03L01/Static/Mod_01_Web_Hook_image43.png)
+
+2. Clear Azure log
+
+	- Go back to the **Azure Function.**
+
+	- Clear **Logs**.
+
+    ![Clear logs - screenshot](M03L01/Static/Mod_01_Web_Hook_image44.png)
+
+3. Update Permit record
+
+	- Go to the **Permit Management** application.
+
+	- Select **Permits** and open one of the **Permit** records.
+
+	- Change the New Size to **4000** and click **Save**
+
+4. Check Azure logs
+
+	- Go back to the **Azure Function**.
+
+	- Maximize the log pane.
+
+    ![Maximize log pane - screenshot](M03L01/Static/Mod_01_Web_Hook_image45.png)
+
+	- The logs should now show both **Pre** and **Post** entity images. In this case you should see the old value **5000** in **Pre** image and the new value **4000** in the **Post** image
+
+    ![Post and pre entity image values - screenshot](M03L01/Static/Mod_01_Web_Hook_image46.png)
+
+**Note:** Technically, we have the data in the target object already. However, if there are plugins modifying the data, PostImage will contain the copy as recorded in CDS while Target contains the data as submitted on Save. In addition to that, preimage contains data before the save operation took place.

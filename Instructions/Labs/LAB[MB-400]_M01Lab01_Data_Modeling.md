@@ -1,580 +1,588 @@
----
-lab:
-    title: 'Lab 01: Data Modeling'
-    module: 'Module 01: Introduction to developing with the Power Platform'
----
+MB400: Microsoft Power Apps + Dynamics 365 Developer
 
-# MB-400: Microsoft PowerApps + Dynamics 365 Developer
-## Module 1, Lab 1 – Data Modeling
+## Module 1, Lab 01 – Data Modeling
 
-Scenario
-========
+# Scenario
 
-A regional building department issues and tracks permits for new buildings and updates permits for building remodels. Throughout this course you will
-build applications and perform automation to enable the regional building
-department to manage the permitting process. This will be an end-to-end solution
-which will help you understand the overall process flow.
+A regional building department issues and tracks permits for new buildings and updates for remodeling of existing buildings. Throughout this course you will build applications and perform automation to enable the regional building department to manage the permitting process. This will be an end-to-end solution which will help you understand the overall process flow.
 
-In this lab, you will set up a development and production environment and create
-solutions to track your changes. You will also create a data model to support
-the following requirements:
+In this lab, you will set up a second environement to memic a production environment for learning purposes, create solutions to track your changes. You will also create a data model to support the following requirements:
 
--   R1 – Track the status of permits issued for new buildings and existing
-    building modifications
+- R1 – Track the status of permits issued for new buildings and existing building modifications
 
--   R2 – Associate permits with a Build Site, which represents the building
-    or land being modified
+- R2 – Permits are associated with a Build Site, which represents the building or land being modified
 
--   R3 – Track permit type to indicate the type of permit, any inspections, or other data
-    that might be required on a permit
+- R3 – Permit type indicates the type of permit and inspections, other data that might be required on a permit
 
--   R4 – Track inspections completed on the permit for the
-    entire process (i.e., from request of inspection to the pass or fail of the
-    inspection)
+- R4 – Inspections completed on the permit work are to be tracked for the entire process i.e., from request of inspection to the pass or fail of the inspection
 
--   R5 – Track the permit requestor 
+- R5 – Permits, for our lab purposes, are requested by a person and we need to track who requested each permit
 
-High-level lab steps
-======================
+# High-level lab steps
 
-To prepare your learning environments you will create a solution and publisher,
-and add both new and existing components that are necessary to meet the application
-requirements. Refer to the data model document for the metadata description
-(entities, field types and relationships). Your solution will contain several
-entities upon completion of all the customizations:
+To prepare your learning environments you will create a solution and publisher and add both new and existing components that are necessary to meet the application requirements. Refer to the data model document for the metadata description (entities, field types and relationships). Your solution will contain several entities upon completion of all the customizations.
 
--   Contact
+![Screen image of grid displaying entities contained in the permit management solution.](M01L01/Static/Mod_01_Data_Modeling_image1.png)
 
--   Build Site
+## Things to consider before you begin
 
--   Inspection
+- What are considered as best practices for managing changes in between environments (“Dev” to “Test” to “Prod”)? Are there additional considerations for team solution development?
 
--   Permit
+- What entities a user might need in the scenario that we are building? 
 
--   Permit Type
+- What relationship behaviors would we consider enabling users to complete their tasks?
 
--   User
+- Remember to work in your **DEVELOPMENT** environment with the customizations. Once the customizations are completed, published and tested in “Dev”, and if everything works fine, the same will be deployed to “Prod”. 
 
-Things to consider before you begin
------------------------------------
+  
+‎ 
 
--   What are considered as best practices for managing changes in between
-    environments (“Dev” to “Test” to “Prod”)?
+# Exercise #1: Create Environments and Solution
 
--   What are entities a user might need in the scenario that we are building?
+**Objective:** In this exercise, you will create a community plan environment to memic Production environment that we will refer to as "Prod".
 
--   What relationship behaviors would we consider enabling users to complete
-    their tasks?
+## Task #1: Create Environments
 
--   Remember to work in your DEVELOPMENT environment with the customizations.
-    Once the customizations are completed, published and tested in “Dev”, the same will be deployed to “Prod”.
+1. Create the community plan environment
 
-<br>Exercise #1: Create Environments and Solution
-==================================================
+	- Navigate to [Power Apps Community Plan page](https://powerapps.microsoft.com/en-us/communityplan/)
+	- Click on *Create an indiviual environment*
+	- Enter your credentials when prompt to sign in
+	- Select your country from the dropdown menu and click *Accept*
+	- Navigate to [Power Platform Admin Center](https://admin.powerplatform.microsoft.com/environments) to see a new environment had been created by the system. We will refer to it as "Prod" environment for the rest of this course.
 
-**Objective:** In this exercise, you will create both development and production
-environments.
 
-Task #1: Create Environments
------------------------------
 
-First, we will view the available environments.
+ You should now have the dev environment and the "Prod" environment listed under environments.
 
-1.  Sign in to <https://admin.powerplatform.microsoft.com> with your provided credentials.
 
-2.  Select **Environments**. You should see two environments: A Default environment and a Production environment.
+## Task #2: Create Solution and Publisher
 
-3. Open the **Production** environment and review the settings.
+1. Create Solution
 
-Next, we will create the Development Environment.
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/)
 
-1.  Select **Environments** and click **New** from the top menu. This will again
-    open a menu on the right-hand side of the window.
+	- Select your Dev environment.
 
-2.  Enter **[Your Last Name] Dev** for **Name**.
+    ![Select environment - screenshot](M01L01/Static/Mod_01_Data_Modeling_image3.png)
 
-3.  Select **Trial** in the dropdown for **Type**.
+	- Select **Solutions** from the left menu and click **+** **New solution**.
 
-4.  Select your **Region**.
+	- Enter **Permit Management** for **Display Name**.
 
-5.  Enter the **Purpose** for creating this environment (Optional).
+2. Create Publisher
 
-6.  Turn on the **toggle** to **create a database for this environment** if you
-    wish to create the database. Otherwise this can be done once
-    the environment is configured.
+	- Click on the **Publisher** dropdown and select **+ Publisher**.
 
-7.  Click **Next.**
+    ![New publisher - screenshot](M01L01/Static/Mod_01_Data_Modeling_image4.png)
 
-8.  Select **Language** and **Currency**. For the purposes of these labs, the
-    environments have **English** and **US dollars** (USD) selected.
+	- Enter **Contoso** for **Display Name** and **contoso** for **Prefix.** 
 
-9.  Leave the **Enable Dynamics 365 apps** disabled for the purpose of these
-    labs.
+	- Click **Save and Close**.
 
-10. Leave the **Deploy Sample apps and data** disabled for the purpose of these
-    labs.
+    ![Save publisher - screenshot](M01L01/Static/Mod_01_Data_Modeling_image5.png)
 
-11. Click **Save**.
+	- Click **Done**.
 
-12. Your environment may take a few minutes to provision. You can click the **Refresh** button to refresh the subgrid. When the environment is provisioned, the **State** will change to Ready.
+3. Complete the solution creation
 
-14. If you did not previously create your database, select your environment click **Create my database**. Otherwise, skip this step.
+	- Now, click on the **Publisher** dropdown and select the **Contoso** publisher you just created.
 
-    - Select **Currency** and **Language**. For the purposes of these labs, the
-    environments have **US dollars** (USD) and **English** selected.
+	- Enter **1.0.0.0** for **Version** and click **Create**.
 
-    - Click **Create my Database**. Your database may take a few minutes to provision. 
+ 
 
-Task #2: Create Solution and Publisher
----------------------------------------
+## Task #3: Add Existing Entity
 
-1.  Create Solution
+1. Add Contact entity to the solution
 
-    -   Sign in to <https://make.powerapps.com>
+	- Click to open the **Permit Management** solution you just created.
 
-    -   Select your Dev environment from the top drop-down menu.
+	- Click **Add Existing** and select **Entity**.
 
-    -   Select **Solutions** from the left menu and click **New Solution**.
+    ![Add existing entity - screenshot](M01L01/Static/Mod_01_Data_Modeling_image6.png)
 
-    -   Enter **Permit Management** for **Display Name**.
+	- Search for **Contact** and select it.
 
-2.  Create Publisher
+	- Click **Next**.
 
-    -   Click on the **Publisher** dropdown and select **+ Publisher**. A new window will open. (Ensure your pop-up blocker is disabled if the window does not open.)
+	- Click **Select** **Components**.
 
-    -   Enter **Contoso** for **Display Name** and **contoso** for **Prefix**
+    ![Select entity components - screenshot](M01L01/Static/Mod_01_Data_Modeling_image7.png)
 
-    -   Click **Save and Close**.
+	- Select the **Views** tab and select the **Active Contacts** view. Click **Add**.
 
-3.  Complete the solution creation.
+	- Click **Select Components**.
 
-    -   Now, click on the **Publisher** dropdown and select the **Contoso**
-        publisher you just created.
+	- Select the **Forms** tab and select the **Contact** form.
 
-    -   Enter **1.0.0.0** for **Version** and click **Create**.
+	- Click **Add**.
 
-Task #3: Add Existing Entity
------------------------------
+	- You should have **1 View** and **1 Form** selected. Click **Add** again. This will add the Contact entity to the newly created solution.
 
-1.  Click to open the **Permit Management** solution you just created.
+    ![Add components](M01L01/Static/Mod_01_Data_Modeling_image8.png)
 
-2.  Click **Add Existing** and select **Entity**.
+2. Add User entity to the solution
 
-3.  Search for **Contact** and select it.
+	- Click Add Existing and select **Entity**.
 
-4.  Click **Next**.
+	- Search for **User** and select it.
 
-5.  Click **Select Components**.
+	- Click **Next**.
 
-6.  Select the **Views** tab and select the **Active Contacts** view. Click
-    **Add**.
+	- **DO NOT** select any components. Click **Add**.
 
-7.  Click **Select Components** again.
+	- Your solution should now have two entities.
 
-8.  Select the **Forms** tab and select the **Contact** form.
+ 
 
-9.  Click **Add**.
+# Exercise #2: Create Entities and Fields
 
-10. You should have **1 View** and **1 Form** selected. Click **Add** again.
-    This will add the Contact entity to the newly created solution. Next, we
-    will add the User entity.
+**Objective:** In this exercise, you will create entities, add fields to these entities and edit the **Status Reason** options for the **Permit** and **Inspection** entities.
 
-11. Click Add Existing and select **Entity**.
+## Task #1: Create Permit Entity and Fields
 
-12. Search for **User** and select it.
+1. Continuing in your development environment, open the Permit Management solution
 
-13. Click **Next**.
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/)
 
-14. Do not select any components. Click **Add**.
+	- Select **Solutions** and click to open the **Permit Management** solution you just created.
 
-15. Your solution should now have two entities: Contact and User.
+2. Create Permit entity
 
-Exercise #2: Create Entities and Fields
-========================================
+	- Click **+** **New** and select **Entity**.
 
-**Objective:** In this exercise, you will create entities and add fields to
-these entities and edit the **Status Reason** options for the **Permit** and
-**Inspection** entities.
+    ![Add new entity - screenshot](M01L01/Static/Mod_01_Data_Modeling_image9.png)
 
-Task #1: Create Permit Entity and Fields
------------------------------------------
+	- Enter **Permit** for **Display Name** and click **Create**. This will start provisioning the entity in background while you can start adding fields.
 
-1.  Continuing in your Dev environment, open the Permit Management
-    solution
+3. Create Start Date field
 
-    -   Sign in to <https://make.powerapps.com> (if you are not already signed in).
+	- Make sure you have the **Fields** tab selected and click **+** **Add Field**.
 
-    -   Select **Solutions** and click to open the **Permit Management**
-        solution you just created (if you are not already in this Solution).
+    ![Add field - screenshot](M01L01/Static/Mod_01_Data_Modeling_image10.png)
 
-2.  Create Permit entity
+	- Enter **Start Date** for **Display Name**.
 
-    -   Click **New** and select **Entity**.
+	- Select **Date Only** for **Data Type**.
 
-    -   Enter **Permit** for **Display Name** and click **Create**. This will
-        start provisioning the entity in background while you can start adding
-        other fields.
+	- Select **Required**.
 
-3.  Create Start Date field.
+	- Leave the searchable checkbox checked. When a field is searchable it appears in Advanced Find in model-driven apps and is available when customizing views. De-selecting this will reduce the number of options shown to people using advanced find.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Click **Done**.
 
-    -   Enter **Start Date** for **Display Name**.
+4. Create Expiration Date field.
 
-    -   Select **Date Only** for **Data Type**.
+	- Click **+ Add Field**.
 
-    -   Check the **Required** checkbox.
+	- Enter **Expiration Date** for **Display Name**.
 
-    -   Click **Done**.
+	- Select **Date Only** for **Data Type**.
 
-4.  Create Expiration Date field.
+	- Click **Done**.
 
-    -   Click **Add Field**.
+5. Create New Size field.
 
-    -   Enter **Expiration Date** for **Display Name**.
+	- Click **+ Add Field**.
 
-    -   Select **Date Only** for **Data Type**.
+	- Enter **New Size** for **Display Name**.
 
-    -   Click **Done**.
+	- Select **Whole Number** for **Data Type.** 
 
-5.  Create New Size field.
+	- Click **Done**.
 
-    -   Click **Add Field**.
+	- Select **Custom** for filter.
 
-    -   Enter **New Size** for **Display Name**.
+    ![Change filter to custom - screenshot](M01L01/Static/Mod_01_Data_Modeling_image11.png)
 
-    -   Select **Whole Number** for **Data Type.**
+	- Click **Save Entity**.
 
-    -   Click **Done**.
+    ![Save entity - screenshot](M01L01/Static/Mod_01_Data_Modeling_image12.png)
 
-    -   Click **Save Entity**.
+ 
 
-Task #2: Create Permit Type Entity and Fields
-----------------------------------------------
+## Task #2: Create Permit Type Entity and Fields
 
-1.  Create Permit Type entity
+1. Create Permit Type entity
 
-    -   Click on the solution name. This action will take you back to the
-        Solution.
+	- Click on the solution name. This action will take you back to the Solution.
 
-    -   Click **New** and select **Entity**.
+    ![Navigation breadcrumbs - screenshot ](M01L01/Static/Mod_01_Data_Modeling_image13.png)
 
-    -   Enter **Permit Type** for **Display Name**.
+	- Click **+ New** and select **Entity**.
 
-    -   Click **Create**.
+	- Enter **Permit Type** for **Display Name**.
 
-2.  Create Require Inspections field
+	- Click **Done**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+2. Create Require Inspections field
 
-    -   Enter **Require Inspections** for **Display Name**.
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-    -   Select **Two Options** for **Data Type**.
+	- Enter **Require Inspections** for **Display Name**.
 
-    -   Click **Done**.
+	- Select **Two Options** for **Data Type**.
 
-3.  Create Require Size field
+	- Click **Done**.
 
-    -   Click **Add Field**.
+3. Create Require Size field
 
-    -   Enter **Require Size** for **Display Name**.
+	- Click **+ Add Field**.
 
-    -   Select **Two Options** for **Data Type**.
+	- Enter **Require Size** for **Display Name**.
 
-    -   Click **Done**.
+	- Select **Two Options** for **Data Type**.
 
-4.  Click **Save Entity**.
+	- Click **Done**.
 
-Task #3: Create Build Site Entity and Fields
----------------------------------------------
+4. Click Save Entity
 
-1.  Create Build Site entity
+ 
 
-    -   Click on the solution name. This action will take you back to the
-        Solution.
+ 
 
-    -   Click **New** and select **Entity**.
+## Task #3: Create Build Site Entity and Fields
 
-    -   Enter **Build Site** for **Display Name.**
+1. Create Build Site entity
 
-    -   Change the **Display Name** of the **Primary Field** to **Street
-        Address.**
+	- Click on the solution name. This action will take you back to the Solution.
 
-    -   Change the **Name** of the **Primary Field** to **street1.**
+	- Click **+ New** and select **Entity**.
 
-    -   Click **Create**.
+	- Enter **Build Site** for **Display Name.**
 
-2.  Add City field
+	- Change the **Display Name** of the **Primary Field** to **Street Address.**
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Change the **Name** of the **Primary Field** to **street1.**
 
-    -   Enter **City** for **Display Name** and change the **Name** to **city**.
+	- Click **Done**.
 
-    -   Make sure **Text** is selected for **Data Type**.
+    ![Primary field properties - screenshot](M01L01/Static/Mod_01_Data_Modeling_image14.png)
 
-    -   Check the **Required** checkbox.
+2. Add City field
 
-    -   Click **Done**.
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-3.  Add Zip/Postal Code field
+	- Enter **City** for **Display Name** and change the **Name** to **city**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Make sure **Text** is selected for **Data Type**. 
 
-    -   Enter **ZIP/Postal Code** for **Display Name** and change the **Name**
-        to **postalcode**.
+	- Select **Required**. 
 
-    -   Make sure **Text** is selected for **Data Type**.
+	- Click **Done**.
 
-    -   Check the **Required** checkbox.
+    ![Field properties - screenshot](M01L01/Static/Mod_01_Data_Modeling_image15.png)
 
-    -   Click **Done**.
+3. Add Zip/Postal Code field
 
-4.  Add State/Province field
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Enter **ZIP/Postal Code** for **Display Name** and change the **Name** to **postalcode**.
 
-    -   Enter **State/Province** for **Display Name** and change the **Name** to
-        **stateprovince**.
+	- Make sure **Text** is selected for **Data Type**. 
 
-    -   Make sure **Text** is selected for **Data Type**.
+	- Select **Required**. 
 
-    -   Check the **Required** checkbox.
+	- Click **Done**.
 
-    -   Click **Done**.
+4. Add State/Province field
 
-5.  Add Country/Region field
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Enter **State/Province** for **Display Name** and change the **Name** to **stateprovince**.
 
-    -   Enter **Country/Region** for **Display Name** and change the **Name** to
-        **country**.
+	- Make sure **Text** is selected for **Data Type**.
 
-    -   Make sure **Text** is selected for **Data Type.**
+	- Select **Required**.
 
-    -   Click **Done**.
+	- Click **Done**.
 
-6.  Click **Save Entity**.
+5. Add Country Region field
 
-Task #4: Create Inspection Entity and Fields
----------------------------------------------
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-1.  Create Inspection entity
+	- Enter **Country/Region** for **Display Name** and change the **Name** to **country**.
 
-    -   Click on the solution name. This action will take you back to the
-        Solution.
+	- Make sure **Text** is selected for **Data Type.** 
 
-    -   Click **New** and select **Entity**.
+	- Click **Done**.
 
-    -   Enter **Inspection** for **Display Name.**
+6. Click **Save Entity**.
 
-    -   Click **Create**.
+ 
 
-2.  Add Inspection Type field
+## Task #4: Create Inspection Entity and Fields
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+1. Create Inspection entity
 
-    -   Enter **Inspection Type** for **Display Name**.
+	- Click on the solution name. This action will take you back to the Solution.
 
-    -   Select **Option Set** for **Data Type**.
+	- Click **New** and select **Entity**.
 
-    -   Click on the **Option Set** dropdown and select +**New Option Set.**
+	- Enter **Inspection** for **Display Name.**
 
-    -   Enter **Initial Inspection** and click **Add New Item**.
+	- Click **Done**.
 
-    -   Enter **Final Inspection** and click **Save**.
+2. Add Inspection Type field
 
-    -   Click **Done**.
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-3.  Add Scheduled Date field
+	- Enter **Inspection Type** for **Display Name**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Select **Option Set** for **Data Type**.
 
-    -   Enter **Scheduled Date** for **Display Name**.
+	- Click on the **Option Set** dropdown and select +**New Option Set.**
 
-    -   Select **Date Only** for **Data Type**.
+    ![New option set - screenshot](M01L01/Static/Mod_01_Data_Modeling_image16.png)
 
-    -   Check the **Required** checkbox.
+	- Enter **Initial Inspection** and click **Add New Item**.
 
-    -   Click **Done**.
+    ![Add new option-set item - screenshot](M01L01/Static/Mod_01_Data_Modeling_image17.png)
 
-4.  Add Comments field
+	- Enter **Final Inspection** and click **Save**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+    ![Option-set options - screenshot](M01L01/Static/Mod_01_Data_Modeling_image18.png)
 
-    -   Enter **Comments** for **Display Name**.
+	-  Click **Done**.
 
-    -   Make sure **Text** is selected for **Data Type.**
+3. Add Scheduled Date field
 
-    -   **Set Max length to 1000 in the Advanced options**
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-    -   Click **Done**.
+	- Enter **Scheduled Date** for **Display Name**.
 
-5.  Add Sequence field
+	- Select **Date Only** for **Data Type**.
 
-    -   Make sure you have the **Fields** tab selected and click **Add Field**.
+	- Select **Required**. 
 
-    -   Enter **Sequence** for **Display Name**.
+	- Click **Done**.
 
-    -   Make sure **Text** is selected for **Data Type**.
+4. Add Comments field
 
-    -   Click **Done**.
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
 
-6.  Click **Save Entity**.
+	- Enter **Comments** for **Display Name**.
 
-7.  Select **Solutions**. This action will take you back to the
-    Solutions page.
+	- Make sure **Text** is selected for **Data Type.** 
+
+	- Expand **Advanced options.**
+
+	- Set **Max length to 1000** in the Advanced options**.**
+
+	- Click **Done**.
+
+5. Add Sequence field
+
+	- Make sure you have the **Fields** tab selected and click **+ Add Field**.
+
+	- Enter **Sequence** for **Display Name**.
+
+	- Make sure **Text** is selected for **Data Type**.
+
+	- Click **Done**.
+
+6. Click **Save Entity**.
+
+7. Select **Solutions** on the top and this action will take you back to the Solutions page.
 
 8.  Click **Publish All Customizations.**
 
-Task #5: Edit Status Reason Options
-------------------------------------
+    ![Publish customizations - screenshot](M01L01/Static/Mod_01_Data_Modeling_image19.png)
 
-1.  Open the Permit Management solution
+ 
 
-    -   Sign in to <https://make.powerapps.com> if you are not already signed in.
+## Task #5: Edit Status Reason Options
 
-    -   Select **Solutions** from the left menu and click to open the **Permit
-        Management** solution you have created if you are not already in this solution.
+1. Open the Permit Management solution
 
-    -   Click on the **...** icon in the top menu and select **Switch to Classic**.
+	- Navigate to [Power Apps maker portal](https://make.powerapps.com/)
 
-2.  Edit Inspection entity Status Reason options
+	- Select **Solutions** from the left menu and click to open the **Permit Management** solution.
 
-    -   Expand **Entities**.
+2. Switch to Classic
 
-    -   Expand the **Inspection** entity and select **Fields**.
+	- Click on the **…** icon and select **Switch to Classic**.
 
-    -   Locate and double click to open the **statuscode** (Display Name will be **Status Reason**) field.
+    ![Switch to classic - screenshot](M01L01/Static/Mod_01_Data_Modeling_image20.png)
 
-3.  Change the Active option label
+3. Edit Inspection entity Status Reason options
 
-    -   Make sure you have the **Active** selected for **Status**.
+	- Expand **Entities**.
 
-    -   Select the **Active** option and click **Edit**.
+	- Expand the **Inspection** entity and select **Fields**.
 
-    -   Change the **Label** to **New Request** and click **OK**.
+    ![Select fields - screenshot](M01L01/Static/Mod_01_Data_Modeling_image21.png)
 
-4.  Add the Pending Option
+	- Locate and double click to open the **statuscode** field.
 
-    -   Click **Add**.
+    ![Open field for edit - screenshot](M01L01/Static/Mod_01_Data_Modeling_image22.png)
 
-    -   Enter **Pending** for **Label** and click **OK**.
+4. Change the Active option label
 
-5.  Add the Passed Option
+	- Make sure you have **Active** selected for **Status**.
 
-    -   Click **Add**.
+	- Select the **Active** option and click **Edit**.
 
-    -   Enter **Passed** for **Label** and click **OK.**
+    ![Edit option - screenshot](M01L01/Static/Mod_01_Data_Modeling_image23.png)
 
-6.  Add the Failed Option
+	- Change the **Label** to **New Request** and click **OK**.
 
-    -   Click **Add**.
+    ![Change option label - screenshot](M01L01/Static/Mod_01_Data_Modeling_image24.png)
 
-    -   Enter **Failed** for **Label** and click **OK.**
+5. Add the Pending Option
 
-7.  Add the Cancelled Option
+	- Click **Add**.
 
-    -   Click **Add**.
+    ![Add new option - screenshot](M01L01/Static/Mod_01_Data_Modeling_image25.png)
 
-    -   Enter **Cancelled** for **Label** and click **OK.**
+	- Enter **Pending** for **Label** and click **OK**.
 
-8.  Your option-set should now have 5 options for the **Active** state.
+6. Add the Passed Option
 
-9.  Select Pending as the Default Value and click **Save and Close** from the
-    top menu.
+	- Click **Add**.
 
-10. Edit Permit entity Status Reason options
+	- Enter **Passed** for **Label** and click **OK.**
 
-    -   Expand the **Permit** entity and select **Fields**.
+7. Add the Failed Option
 
-    -   Locate and double click to open the **statuscode** field.
+	- Click **Add**.
 
-11. Add the Locked option
+	- Enter **Failed** for **Label** and click **OK.**
 
-    -   Make sure you have the **Active** selected for **Status**.
+8. Add the Canceled Option
 
-    -   Click **Add**.
+	- Click **Add**.
 
-    -   Enter **Locked** for Label and click **OK**.
+	- Enter **Canceled** for **Label** and click **OK.**
 
-12. Add the Completed option
+9. Your option-set should now have 5 options for the **Active** state.
 
-    -   Click **Add**.
+    ![Option-set options - screenshot](M01L01/Static/Mod_01_Data_Modeling_image26.png)
 
-    -   Enter **Completed** for Label and click **OK**.
+10. Select Pending as the Default Value and click **Save and Close** from the top menu.
 
-13. Add the Cancelled option
+    ![Select option-set default option - screenshot](M01L01/Static/Mod_01_Data_Modeling_image27.png)
 
-    -   Click **Add**.
+11. Edit Permit entity Status Reason options
 
-    -   Enter **Cancelled** for Label and click **OK**.
-    
-14. Add the Expired option
+	- Expand the **Permit** entity and select **Fields**.
 
-    -   Click **Add**.
+    ![Select entity fields - screenshot](M01L01/Static/Mod_01_Data_Modeling_image28.png)
 
-    -   Enter **Expired** for Label and click **OK**.
+	- Locate and double click to open the **statuscode** field.
 
-15. Your option-set should now have 5 options for the **Active** state.
+12. Add the Locked option
 
-16. Select the **Active** for the **Default Value** and click **Save and Close**
-    from the top menu.
+	- Make sure you have the **Active** selected for **Status**.
 
-17. Select **Information** from the left side menu and click **Save and Close**
-    to close classic solution explorer.
+	- Click **Add**.
 
-18. Select **Solutions** from the top menu and click **Publish All
-    Customizations**.
+	- Enter **Locked** for Label and click **OK**.
 
-Exercise #3: Create Relationships 
-===================================
+13. Add the Completed option
+
+	- Click **Add**.
+
+	- Enter **Completed** for Label and click **OK**.
+
+14. Add the Canceled option
+
+	- Click **Add**.
+
+	- Enter **Canceled** for Label and click **OK**.
+
+15. Add the Expired option
+
+	- Click **Add**.
+
+	- Enter **Expired** for Label and click **OK**.
+
+16. Your option-set should now have 5 options for the **Active** state
+
+    ![Option-set options - screenshot](M01L01/Static/Mod_01_Data_Modeling_image29.png)
+
+17. Select the **Active** for the **Default Value** and click **Save and Close** from the top menu
+
+18. Select **Information** from the left side menu and click **Save and Close** to close classic solution explorer
+
+    ![Save and close solution explorer - screenshot](M01L01/Static/Mod_01_Data_Modeling_image30.png)
+
+19. Select **Solutions** from the top menu and click **Publish All Customizations**.
+
+ 
+
+ 
+
+  
+‎ 
+
+# Exercise #3: Create Relationships 
 
 **Objective:** In this exercise, you will create relationships.
 
-Task #1: Create Relationships
-------------------------------
+ 
 
-1.  Sign in to <https://make.powerapps.com> if you are not already signed in.
+## Task #1: Create Relationships
 
-2. Select **Solutions**.
+1. Open the Permit Management solution
 
-3.  Open the **Permit Management** solution.
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/)
 
-4.  Create Permit to Contact relationship
+	- Select **Solutions** and click to open the **Permit Management** solution.
 
-    - Click to open the **Permit** entity.
+2. Create Permit to Contact relationship
 
-    - Select the **Relationships** tab.
+	- Click to open the **Permit** entity.
 
-    - Click **Add Relationship** and select **Many-to-one**.
+	- Select the **Relationships** tab.
 
-    - Select Contact for **Related (One)** and click **Done**.
+	- Click **+ Add Relationship** and select **Many-to-one**.
 
-5. Create Permit to Inspection relationship
+    ![Many to one relationship - screenshot](M01L01/Static/Mod_01_Data_Modeling_image31.png)
 
-    - Click **Add Relationship** and select **One-to-Many**.
+	- Select Contact for **Related (One)** and click **Done**.
 
-    - Select **Inspection** for **Entity** in the **Related (Many)** and click
-    **Advanced Options**.
+    ![Relationship properties - screenshot](M01L01/Static/Mod_01_Data_Modeling_image32.png)
 
-    - Change the **Type of Behavior** to **Parental** and click **Done**.
+3. Create Permit to Inspection relationship
 
-6. Create Permit to Build Site relationship
+	- Click **Add Relationship** and select **One-to-Many**.
 
-    - Click **Add Relationship** and select **Many-to-One**.
+	- Select **Inspection** for **Entity** in the **Related (Many)** and click **Advanced Options**.
 
-    - Select **Build Site** for **Related (One) Entity** and click **Advanced
-    Options**.
+    ![Relationship advanced options - screenshot](M01L01/Static/Mod_01_Data_Modeling_image33.png)
 
-    - Change the **Delete** to **Restrict** and click **Done**.
+	- Change the **Type of Behavior** to **Parental** and click **Done**.
 
-7. Create Permit to Permit Type relationship
+    ![Relationship behavior - screenshot](M01L01/Static/Mod_01_Data_Modeling_image34.png)
 
-    - Click **Add Relationship** and select **Many-to-One**.
+4. Create Permit to Build Site relationship
 
-    - Select **Permit Type** for **Related (One) Entity** and click **Done**.
+	- Click **Add Relationship** and select **Many-to-One**.
 
-    - Click **Save Entity**.
+	- Select **Build Site** for **Related (One) Entity** and click **Advanced Options**.
 
-    - Select **Solutions** from the top menu and click **Publish All
-    Customizations.**
+	- Change the **Delete** to **Restrict** and click **Done**.
+
+    ![Relationship advanced options - screenshot](M01L01/Static/Mod_01_Data_Modeling_image35.png)
+
+5. Create Permit to Permit Type relationship
+
+	- Click **Add Relationship** and select **Many-to-One**.
+
+	- Select **Permit Type** for **Related (One) Entity** and click **Done**.
+
+6. Change the filter to **Custom**.
+
+    ![Change filter - screenshot](M01L01/Static/Mod_01_Data_Modeling_image36.png)
+
+7. Click **Save Entity**.
+
+    ![Save entity - screenshot](M01L01/Static/Mod_01_Data_Modeling_image37.png)
+
+8. Select **Solutions** from the top menu and click **Publish All Customizations.**
+
+#  
+
+ 

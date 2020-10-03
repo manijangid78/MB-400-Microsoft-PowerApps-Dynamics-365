@@ -1,741 +1,737 @@
----
-lab:
-    title: 'Lab 03: Plug-ins'
-    module: 'Module 02: Extending the Power Platform Common Data Service'
----
 
-# MB-400: Microsoft PowerApps + Dynamics 365 Developer
-## Module 2, Lab 3 - Plug-ins
 
-Scenario
-========
+MB400: Microsoft Power Apps + Dynamics 365 Developer
 
-A regional building department issues and tracks permits for new buildings and
-updates for remodeling of existing buildings. Throughout this course you will
-build applications and perform automation to enable the regional building
-department to manage the permitting process. This will be an end-to-end solution
-which will help you understand the overall process flow.
+## Module 02, Lab 03 – Plug-ins
 
-In this lab you will build two plugins. The first plugin will run when a new
-permit record is created and it will check that there are no other permits that
-exists for the build sites that are “locked”. If a locked permit is found, the
-plugin will block the creation of this new permit. The second plugin will hook
-up and run when the Lock Permit custom action is invoked. In the prior module we
-defined the custom action, and now with the plugin step registered on execution
-of the custom action, it will actually perform the lock permit business logic.
+# Scenario
 
-High-level lab steps
-======================
+A regional building department issues and tracks permits for new buildings and updates for remodeling of existing buildings. Throughout this course you will build applications and automation to enable the regional building department to manage the permitting process. This will be an end-to-end solution which will help you understand the overall process flow.
 
-As part of building the plugins, you will complete the following activities:
+In this lab you will build two plugins. The first plugin will run when a new permit record is created, and it will check that there are no other permits that exists for the build sites that are “locked”. If a locked permit is found, the plugin will block the creation of this new permit. The second plugin will hook up and run when the Lock Permit custom action is invoked. In the prior module we defined the custom action, and now with the plugin step registered on execution of the custom action, it will now perform the lock permit business logic.
 
--   Create two plugins using a common provided base class
+# High-level lab steps
 
--   Implement logic to work with a plugin registered on an entity event
+As part of building the plugins, you will complete the following activities.
 
--   Implement logic to work with a plugin registered on a custom action event
+- Create two plugins using a common provided base class
 
--   Deploy the plugins and associate them with your solution
+- Implement logic to work with a plugin registered on an entity event
 
--   Use the plugin trace log to see traces from the plugin
+- Implement logic to work with a plugin registered on a custom action event
 
--   Debug the plugin on your local computer
+- Deploy the plugins and associate them with your solution
 
-Things to consider before you begin
------------------------------------
+- Use the plugin trace log to see traces from the plugin
 
--   Do we know what events will trigger our plugins?
+- Debug the plugin on your local computer
 
--   Could what we are doing with the plugin, be done using Microsoft Flow?
+## Things to consider before you begin
 
--   Remember to continue working in your DEVELOPMENT environment. We’ll move
-    everything to production soon.
+- Do we know what events will trigger our plugins?
 
-Exercise #1: Block New Permit Creation Plugin
-==============================================
+- Could what we are doing with the plugin, be done using Power Automate?
 
-**Objective:** In this exercise, you will create a plugin that will run on
-create permit, this plugin will check if there are any locked permits for the
-selected build site of the new permit and block the creation of the new permit.
+- Remember to continue working in your DEVELOPMENT environment. We’ll move everything to production soon.
 
-Task #1: Create the plugin
----------------------------
-
-1.  Create a Visual Studio project
-
-    - Start **Visual Studio**.
-
-    -  Click **File > New > Project**.
-
-    -  Select **Class Library (.NET Framework)** and click **Next**. Make sure
-        you have selected the one with C#.
-
-    -  Enter **ContosoPackageProject** for **Project Name**, select a location
-        to save the project, select **.NET Framework 4.6.2** for **Framework**,
-        and then select **Create**.
-
-2.  Select NuGet packages
-
-    -  Right click on the project name and select **Manage NuGet Packages**.
-
-    -  Select the **Browse** tab.
-
-    -  Search for **microsoft.CrmSdk.CoreAssemblies**.
-
-    -  Select **Microsoft.crmsdk.coreassemblies** (one authored by
-        Microsoft)and click **Install**.
-
-    -  Read the license terms and then select **I agree** if you agree.
-
-3.  Delete Class1 and create new class file for the plugin
-
-    -  Right click on **Class1.cs** and **Delete.** Click **OK** on the warning
-        to delete this permanently.
-
-    -  Right on the project and select **Add > Class**.
-
-    -  Enter **PreOperationPermitCreate** for **Name** and click **Add**. You
-        should now be able to see the class file.
-
-4.  Add **PluginBase** file to the project.
-
-    -  Locate the **PluginBase** file in the lab resources folder.
-
-    -  Drag the **PluginBase** file to your Visual Studio project. Make sure
-        that the file now exists in the folder structure.
-
-    -  Review the **PluginBase** class. This class inherits from IPlugin.
-
-    -  Close the **PluginBase** file.
-
-5.  Add **using statements** to the **PreOperationPermitCreate** class, make the
-    class **public**, and inherit from **PuginBase**
-
-    -  Add the using statement below to the **PreOperationPermitCreate** class.
-    
-```
-    using Microsoft.Xrm.Sdk;
-    
-    using Microsoft.Xrm.Sdk.Query;  
-    using ContosoPackagePoject;
-```
-
-6.  Make the **PreOperationPermitCreate** public and **inherit** from
-    **PluginBase**.
-
-7.  Override the ExecuteCDSPlugin method and get the Target entity and the Build
-    Site entity reference.
-
-    -  To override the **ExecuteCDSPlugin** method, add the code below to the
-        **PreOperationPermitCreate** method.
-```
-    protected override void ExecuteCDSPlugin(LocalPluginContext localcontext)
-    
-    {
-    
-    base.ExecuteCDSPlugin(localcontext);
-    
-    }
-```
-8.  To get the **Target** entity, add the code below inside the ExecuteCDSPlugin
-    method.
-```
-    var permitEntity = localcontext.PluginExecutionContext.InputParameters["Target"]
-    as Entity;
-```
-9.  To get the Build Site entity reference, add the below code after
-    **permitEntity** variable definition.
-```
-    var buildSiteRef = permitEntity["contoso_buildsite"] as EntityReference;
-```
-10.  To add Trace Messages, add the below mentioned code after **buildSiteRef**
-    variable definition.
-```
-    localcontext.Trace("Primary Entity Id: " + permitEntity.Id);
-    
-    localcontext.Trace("Build Site Entity Id: " + buildSiteRef.Id);
-```
-11.  Create Fetch xml and that will get the count of locked permits matching the
-    build site id and call retrieve multiple.
-
-   -  Create the **FetchXML** string.
-```
-    string fetchString = "<fetch output-format='xml-platform' distinct='false'
-    version='1.0' mapping='logical' aggregate='true'><entity
-    name='contoso_permit'><attribute name='contoso_permitid' alias='Count'
-    aggregate='count' /><filter type='and' ><condition
-    attribute='contoso_buildsite' uitype='contoso_buildsite' operator='eq' value='{"
-    + buildSiteRef.Id + "}'/><condition attribute='statuscode' operator='eq'
-    value='463270000'/></filter></entity></fetch>";
-```
-
-12.  Call RetrieveMultiple and add Trace Message.
-
-```
-    localcontext.Trace("Calling RetrieveMultiple for locked permits");
-    
-    var response = localcontext.OrganizationService.RetrieveMultiple(new
-    FetchExpression(fetchString));
-```
-
-13.  Get the locked Permit Count and throw InvalidPluginExecutionException if the
-    **Count** is more than 0
-
-   -  Get the locker permits **Count**.
-```
-    int lockedPermitCount =
-    (int)((AliasedValue)response.Entities[0]["Count"]).Value;
-```
-
-14.  Add Trace Message, check if the **Count** is more than **0** and throw
-    **InvalidPluginExecutionException** if it is more than **0**.
-    
-  ```  
-    localcontext.Trace("Locket Permit count : " + lockedPermitCount);
-    
-    if (lockedPermitCount > 0)
-    
-    {
-    
-    throw new InvalidPluginExecutionException("Too many locked permits for build
-    site");
-    
-    }
- ```
- 
-15.  Build the project and make sure it succeeds. To build the project, right
-    click on the project and select **Build**. Check the output and make sure
-    that the build is succeeded. If it does not, go back and review your work
-    compared the steps documented here.
-
-Task #2: Deploy the plugin
----------------------------
-
-1.  Create strong name key.
-
-    -  Right click on the **Project** and select **Properties**.
-
-    -  Select the **Signing** tab, check the **Sign the assembly** checkbox and
-        select **<New…>**.
-
-    -  Enter **contoso.snk** for **Name**, uncheck the Protect with a
-        **Password** checkbox, and click **OK**. Note: In case you get an access
-        denied while creating the signature, close Visual Studio and run it in
-        administrator mode then to successfully complete this step.
-
-    -  Rebuild the project. Make sure the project is rebuilt successfully.
-
-2.  If you don’t have CDS/Dynamics 365 SDK tools downloaded already, download
-    them using the following method:
-
-    -  Navigate to <https://xrm.tools/SDK>
-
-    -  Click **Download SDK Zip File**.
-
-    -  Save the zip file on your machine.
-
-    -  Right click on the downloaded **sdk.zip** file and select
-        **Properties**.
-
-    -  Check the **Unblock** checkbox and click Apply.
-
-    -  Click **OK**.
-
-    -  Right click on the **sdk.zip** file again and select **Extract All**.
-
-    -  Complete extracting.
-
-3.  Start the plugin registration tool and sign in.
-
-    -  Open the **sdk** folder you extracted and click to open the
-        **PluginRegistration** folder.
-
-    -  Locate **PluginRegistration.exe** and double click to start. This will
-        open a new window.
-
-4.  Connect to your org.
-
-    -  Click **Create New Connection**.
-
-    -  Select **Office 365** and check the **Display List of available
-        organization** and **Show Advanced** checkboxes. Select **Online
-        Region** where your organization is located. If you are unsure what
-        region to select, select **Don’t Know**.
-
-    -  Provide your **CDS** credentials and click **Login**.
-
-    -  Select the **Dev** environment and click **Login**.
-
-5.  Register new assembly
-
-    -  Click **Register** and select **Register New Assembly**.
-
-    -  Click **…** to browse.
-
-    -  Browse to the bin/**debug** folder of your plugin project
-        (**ContosoPackageProject**), select the **ContosoPackageProject**.dll
-        file and click **Open**.  
-        
-			**Path:** PathToFolder/ContosoPackageProject/ContosoPackageProject/bin/Debug
-
-    -  Click **Register Selected Plugins**.
-
-    -  Click **OK**.
-
-6.  Register new step
-
-    -  Select the assembly you just registered.
-
-    -  Click **Register** and select **Register New Step**.
-
-    -  Enter **Create** for **Message**.
-
-    -  Enter **contoso_permit** for **Primary Entity**.
-
-    -  Select **PreOperation** from dropdown for **Event Pipeline Stage of
-        Execution** and click **Register New Step**.
-
-    -  Step should now be registered in the assembly plugin.
-
-Exercise #2: Create Custom Action Plugin
-=========================================
-
-**Objective**: In this exercise, you will create and register a plugin that will
-be invoked when the lock permit custom action is used. This plugin will be used
-to implement the business logic of locking the permit. Specifically, it will
-update the permit to indicate it is locked and then cancel any pending
-inspections.
   
-**Note:** If you did not create the custom action in a prior lab, look in your
-resources folder for how to add it here before you proceed.
+‎ 
 
-Task #1: Add a new plugin to the project
------------------------------------------
+# Exercise #1: Block New Permit Creation Plugin
 
-1.  Add new class to the project and name it **LockPermitCancelInspections**
+**Objective:** In this exercise, you will create a plugin that will run on create permit. This plugin will check if there are any locked permits for the selected build site of the new permit and block the creation of the new permit.
 
-    -  Right on the project and select **Add > Class**.
+## Task #1: Create the plugin
 
-    -  Enter **LockPermitCancelInspections** for **Name** and click **Add**.
+1. Create a Visual Studio project
 
-2.  Add **using statements** to the **LockPermitCancelInspections** class, make
-    the class **public**, and inherit from **PuginBase**
+	- Start **Visual Studio**.
 
-    -  Add the using statement below to the **LockPermitCancelInspections**
-        class.
-```
-    using Microsoft.Xrm.Sdk;
+	- Click **File &gt; New &gt; Project**.
+
+	- Select **Class Library (.NET Framework)** and click **Next**. Make sure you have selected the one with C#.
+
+    ![Project type - screenshot](M02L03/Static/Mod_01_Plugin_image1.png)
+
+	- Enter **ContosoPackageProject** for **Project Name**, select a location to save the project, select **.NET Framework 4.6.2** for **Framework**, and then select **Create**.
+
+    ![Project configuration - screenshot](M02L03/Static/Mod_01_Plugin_image2.png)
+
+2. Add NuGet packages
+
+	- Right click on the project name and select **Manage NuGet Packages**.
+
+    ![Mange NuGet packages - screenshot](M02L03/Static/Mod_01_Plugin_image3.png)
+
+	- Select the **Browse** tab.
+
+	- Search for **microsoft.CrmSdk.CoreAssemblies**.
+
+	- Select **Microsoft.crmsdk.coreassemblies** (one authored by Microsoft)and click **Install**.
+
+    ![Install package - screenshot](M02L03/Static/Mod_01_Plugin_image4.png)
+
+	- Read the license terms and then select **I agree** if you agree. 
+
+3. Delete Class1 and create new class file for the plugin
+
+	- Right click on **Class1.cs** and **Delete.** Click **OK** on the warning to delete this permanently.
+
+	- Right on the project and select **Add &gt; Class**.
+
+	- Enter **PreOperationPermitCreate** for **Name** and click **Add**. 
+
+    ![Create class - screenshot](M02L03/Static/Mod_01_Plugin_image5.png)
+
+4. Add **PluginBase** file to the project.
+
+	- Locate the **PluginBase** file in the lab resources folder.
+
+	- Drag the **PluginBase** file to your Visual Studio project. Make sure that the file now exists in the folder structure.
+
+    ![Add class - screenshot](M02L03/Static/Mod_01_Plugin_image6.png)
+
+	- Review the **PluginBase** class. This class inherits from IPlugin.
+
+    ![Class inheritance - screenshot](M02L03/Static/Mod_01_Plugin_image7.png)
+
+Close the **PluginBase** file.
+
+5. Add **using statements** to the **PreOperationPermitCreate** class, make the class **public**, and inherit from **PuginBase**
+
+	- Add the using statement below to the **PreOperationPermitCreate** class.
+
+            using Microsoft.Xrm.Sdk;
+            using Microsoft.Xrm.Sdk.Query;
+            using ContosoPackagePoject;
+
+	- Make the **PreOperationPermitCreate** public and **inherit** from **PluginBase**. 
+
+    ![class declaration - screenshot](M02L03/Static/Mod_01_Plugin_image8.png)
+
+6. Override the ExecuteCDSPlugin method and get the Target entity and the Build Site entity reference.
+
+	- To override the **ExecuteCDSPlugin** method, add the code below to the **PreOperationPermitCreate** method.
+
+            protected override void ExecuteCDSPlugin(LocalPluginContext localcontext)
+
+            {
+
+            base.ExecuteCDSPlugin(localcontext);
+
+            }
+
+	- To get the **Target** entity, add the code below inside the ExecuteCDSPlugin method.
+
+            var permitEntity = localcontext.PluginExecutionContext.InputParameters["Target"] as Entity;
+
+	- To get the Build Site entity reference, add the below code after **permitEntity** variable definition.
+
+            var buildSiteRef = permitEntity["contoso_buildsite"] as EntityReference;
+
+	- To add Trace Messages, add the below mentioned code after **buildSiteRef** variable definition.
+
+            localcontext.Trace("Primary Entity Id: " + permitEntity.Id);
+
+            localcontext.Trace("Build Site Entity Id: " + buildSiteRef.Id);
+
+	7. Create Fetch xml and that will get the count of locked permits matching the build site id and call retrieve multiple.
+
+		- Create the **FetchXML** string.
+
+                string fetchString = "<fetch output-format='xml-platform' distinct='false' version='1.0' mapping='logical' aggregate='true'><entity name='contoso_permit'><attribute name='contoso_permitid' alias='Count' aggregate='count' /><filter type='and' ><condition attribute='contoso_buildsite' uitype='contoso_buildsite' operator='eq' value='{" + buildSiteRef.Id + "}'/><condition attribute='statuscode' operator='eq' value='463270000'/></filter></entity></fetch>";
+
+	    - Call RetrieveMultiple and add Trace Message.
+
+                localcontext.Trace("Calling RetrieveMultiple for locked permits");
+                var response = localcontext.OrganizationService.RetrieveMultiple(new FetchExpression(fetchString));
+
+	8. Get the locked Permit Count and throw InvalidPluginExecutionException if the **Count** is more than 0
+
+		- Get the locker permits **Count**.
+
+                int lockedPermitCount = (int)((AliasedValue)response.Entities[0]["Count"]).Value;
+
+	- Add Trace Message, check if the **Count** is more than **0** and throw **InvalidPluginExecutionException** if it is more than **0**.
+
+            localcontext.Trace("Locket Permit count : " + lockedPermitCount);
+            if (lockedPermitCount > 0)
+            {
+            throw new InvalidPluginExecutionException("Too many locked permits for build site");
+            }
+
+	- The ExecuteCDSPlugin method should now look like the image below.
+
+    ![Execute CDS Plugin method - screenshot](M02L03/Static/Mod_01_Plugin_image9.png)
+
+	- Build the project and make sure it succeeds. To build the project, right click on the project and select **Build**. Check the output and make sure that the build is succeeded. If it does not, go back and review your work compared the steps documented here. 
+
+ 
+
+## Task #2: Deploy the plugin
+
+1. Create strong name key.
+
+	- Right click on the **Project** and select **Properties**.
+
+    ![Project properties - screenshot](M02L03/Static/Mod_01_Plugin_image10.png)
+
+	- Select the **Signing** tab, check the **Sign the assembly** checkbox and select **&lt;New…&gt;**.
+
+    ![Project signing - screenshot](M02L03/Static/Mod_01_Plugin_image11.png)
+
+	- Enter **contoso.snk** for **Name**, uncheck the Protect with a **Password** checkbox, and click **OK**. Note: In case you get an access denied while creating the signature, close Visual Studio and run it in administrator mode to successfully complete this step.
+
+    ![Project signing key - screenshot](M02L03/Static/Mod_01_Plugin_image12.png)
+
+	- Rebuild the project. Make sure the project is rebuilt successfully.
+
+2. If you don’t have CDS/Dynamics 365 SDK tools downloaded already, download them using the following method: 
+
+	- Navigate to [https://xrm.tools/SDK](https://xrm.tools/SDK) 
+
+	- Click **Download SDK Zip File**.
+
+    ![Download SDK - screenshot](M02L03/Static/Mod_01_Plugin_image13.png)
+
+	- Save the zip file on your machine.
+
+	- Right click on the downloaded **sdk.zip** file and select **Properties**.
+
+    ![File properties - screenshot](M02L03/Static/Mod_01_Plugin_image14.png)
+
+	- Check the **Unblock** checkbox and click Apply.
+
+    ![Unblock file - screenshot](M02L03/Static/Mod_01_Plugin_image15.png)
+
+	- Click **OK**.
+
+	- Right click on the **sdk.zip** file again and select **Extract All**.
+
+	- Complete extracting.
+
+3. Start the plugin registration tool and sign in.
+
+	- Open the **sdk** folder you extracted and click to open the **PluginRegistration** folder.
+
+	- Locate **PluginRegistration.exe** and double click to start. This will open a new window.
+
+    ![Start plugin registration tool - screenshot](M02L03/Static/Mod_01_Plugin_image16.png)
+
+2. Connect to your org.
+
+	- Click **Create New Connection**.
+
+    ![New connection - screenshot](M02L03/Static/Mod_01_Plugin_image17.png)
+
+- Select **Office 365** and check the **Display List of available organization** and **Show Advanced** checkboxes. Select **Online Region** where your organization is located. If you are unsure what region to select, select **Don’t Know**.
+
+- Provide your **CDS** credentials and click **Login**.
+
+    ![Provide credentials - screenshot](M02L03/Static/Mod_01_Plugin_image18.png)
+
+	- Select the **Dev** environment and click **Login**.
+
+    ![Select environment - screenshot](M02L03/Static/Mod_01_Plugin_image19.png)
+
+4. Register new assembly
+
+	- Click **Register** and select **Register** **New Assembly**.
+
+    ![Register new assembly - screenshot](M02L03/Static/Mod_01_Plugin_image20.png)
+
+	- Click **…** to browse.
+
+    ![Register new assembly - screenshot](M02L03/Static/Mod_01_Plugin_image21.png)
+
+	- Browse to the bin/**debug** folder of your plugin project (**ContosoPackageProject**), select the **ContosoPackageProject**.dll file and click **Open**.  
+‎**Path:** PathToFolder/ContosoPackageProject/ContosoPackageProject/bin/Debug
+
+    ![Select .dll file - screenshot](M02L03/Static/Mod_01_Plugin_image22.png)
+
+	- Click **Register Selected Plugins**.
+
+    ![Register plugin - screenshot](M02L03/Static/Mod_01_Plugin_image23.png)
+
+	- Click **OK**.
+
+    ![Registration popup - screenshot](M02L03/Static/Mod_01_Plugin_image24.png)
+
+5. Register new step
+
+	- Select the assembly you just registered.
+
+	- Click **Register** and select **Register** **New Step**.
+
+    ![Register new step - screenshot](M02L03/Static/Mod_01_Plugin_image25.png)
+
+	- Enter **Create** for **Message**.
+
+	- Enter **contoso_permit** for **Primary Entity**.
+
+	- Select **PreOperation** from dropdown for **Event Pipeline Stage of Execution** and click **Register New Step**.
+
+    ![Register step - screenshot](M02L03/Static/Mod_01_Plugin_image26.png)
+
+	- Step should now be registered in the assembly plugin.
+
+    ![Registered step - screenshot](M02L03/Static/Mod_01_Plugin_image27.png)
+
+ 
+
+  
+‎ 
+
+# Exercise #2: Create Custom Action Plugin
+
+**Objective**: In this exercise, you will create and register a plugin that will be invoked when the lock permit custom action is used. This plugin will be used to implement the business logic of locking the permit. Specifically, it will update the permit to indicate it is locked and then cancel any pending inspections.  
+‎**Note:** If you did not create the custom action in a prior lab, look in your resources folder for how to add it here before you proceed.
+
+## Task #1: Add a new plugin to the project
+
+1. Add new class to the project and name it **LockPermitCancelInspections**
+
+	- Right on the project and select **Add &gt; Class**.
+
+    ![Add class to project - screenshot](M02L03/Static/Mod_01_Plugin_image28.png)
+
+	- Enter **LockPermitCancelInspections** for **Name** and click **Add**.
+
+    ![Add class - screenshot](M02L03/Static/Mod_01_Plugin_image29.png)
+
+2. Add **using statements** to the **LockPermitCancelInspections** class, make the class **public**, and inherit from **PuginBase**
+
+	- Add the using statement below to the **LockPermitCancelInspections** class.
+
+            using Microsoft.Xrm.Sdk;
+            using System.Text.RegularExpressions;
+            using ContosoPackagePoject;
+            using Microsoft.Xrm.Sdk.Query;
+
+	- Make the **LockPermitCancelInspections** public and **inherit** from **PluginBase**.
+
+    ![Add using statements and edit class - screenshot](M02L03/Static/Mod_01_Plugin_image30.png)
+
+3. To override the ExecuteCDSPlugin method and get the reason value from the input parameter.
+
+	- Override the **ExecuteCDSPlugin** method. Add the code below inside the **LockPermitCancelInspections** method.
+
+            protected override void ExecuteCDSPlugin(LocalPluginContext localcontext)
+            {
+            base.ExecuteCDSPlugin(localcontext);
+            }
+
+4. Get the target entity reference, entity, set status reason to lock, and update the permit record.
+
+	- Get the target **Entity Reference** and **Entity**.
+
+            var permitEntityRef = localcontext.PluginExecutionContext.InputParameters["Target"] as EntityReference;
+            Entity permitEntity = new Entity(permitEntityRef.LogicalName, permitEntityRef.Id);
+
+	- Add **Trace** message and Set the **Status Reason** to **Lock**. 463270000 is the lock value of the Status Reason option-set and statuscode is the name of the status reason field.
+
+            localcontext.Trace("Updating Permit Id : " + permitEntityRef.Id);
+            permitEntity["statuscode"] = new OptionSetValue(463270000);
+
+	- Update the **Permit** record and add **Trace** message.
+
+            localcontext.OrganizationService.Update(permitEntity);
+            localcontext.Trace("Updated Permit Id " + permitEntityRef.Id);
+
+    ![Execute plugin method - screenshot](M02L03/Static/Mod_01_Plugin_image31.png)
+
+## Task #2: Get Related Inspections and Cancel
+
+1. Create query and condition expressions.
+
+	- Create the **QueryExpression**. Add the code below to the **ExecuteCDSPlugin** method.
+
+            QueryExpression qe = new QueryExpression();
+            qe.EntityName = "contoso_inspection";
+            qe.ColumnSet = new ColumnSet("statuscode");
+
+	- Create the **ConditionExpression**.
+
+            ConditionExpression condition = new ConditionExpression();
+            condition.Operator = ConditionOperator.Equal;
+            condition.AttributeName = "contoso_permit";
+            condition.Values.Add(permitEntityRef.Id);
+
+	- Set the **Criteria** of the query.
+
+            qe.Criteria = new FilterExpression(LogicalOperator.And);
+
+	- Add the **ConditionExpression** to the **Criteria** of the **QueryExpression**.
+
+            qe.Criteria.Conditions.Add(condition);
+
+    ![Execute plugin method after update - screenshot](M02L03/Static/Mod_01_Plugin_image32.png)
+
+2. Retrieve the inspections and iterate through the returned entities.
+
+	- Retrieve the **Inspections** and add **Trace** messages.
+
+            localcontext.Trace("Retrieving inspections for Permit Id " + permitEntityRef.Id);
+            var inspectionsResult = localcontext.OrganizationService.RetrieveMultiple(qe);
+            localcontext.Trace("Retrievied " + inspectionsResult.TotalRecordCount + " inspection records");
+
+	- Create a **variable** that will keep track of the canceled **Inspections** count and Iterate through the returned entities.
+
+            int canceledInspectionsCount = 0;
+            foreach (var inspection in inspectionsResult.Entities)
+            {          
+
+            }
+
+3. Retrieve the selected status reason option and check if it is set to new request or pending.
+
+	- Get the currently selected value of the **Status Reason** option-set. Add the code below inside the **foreach** loop.
+
+                var currentValue = inspection.GetAttributeValue<OptionSetValue>("statuscode");
+
+	- Check if the selected option is **New Request** or **Pending** and increment the count. 1 is the value of the New Request option and 463270000 id the value of the Pending option. This should be placed inside the foreach loop.
+
+            if (currentValue.Value == 1 || currentValue.Value == 463270000)
+            {
+            canceledInspectionsCount++;
+            }
+
+4. Cancel the inspections that are pending or new request
+
+	- Set the **Status Reason** selected value to **Canceled**. Add the code below inside the if statement inside the foreach loop. Make sure that 463270003 is the value for **Canceled** **Status Reason** in the **Inspections** entity. If this differs, please update the value with actual value for **Canceled Status Reason**.
+
+                inspection["statuscode"] = new OptionSetValue(463270003);
+
+	- Update the **Inspection** and add **Trace** messages.
+
+            localcontext.Trace("Canceling inspection Id : " + inspection.Id);
+            localcontext.OrganizationService.Update(inspection);
+            localcontext.Trace("Canceled inspection Id : " + inspection.Id);
+
+ 
+
+    ![Foreach section of the execute plugin method - screenshot](M02L03/Static/Mod_01_Plugin_image33.png)
+
+## Task #3: Set Output Parameter and Create Note Record
+
+1. Check if at least one Inspection was canceled and CanceledInspectionsCount output Parameter.
+
+	- Check if at least one **Inspection** was canceled. Add the code below after the **foreach** loop.
+
+            if (canceledInspectionsCount > 0)
+            {           
+
+            }
+
+	- Set the **CanceledInspectionsCount** output parameter. Add the code below inside the if statement outside the foreach loop.
     
-    using System.Text.RegularExpressions;
-    
-    using ContosoPackagePoject;
-    
-    using Microsoft.Xrm.Sdk.Query;
-```
-3.  Make the **LockPermitCancelInspections** public and **inherit** from
-    **PluginBase**.
-
-4.  To override the ExecuteCDSPlugin method and get the reason value from the
-    input parameter.
-
-    -  Override the **ExecuteCDSPlugin** method. Add the code below inside the
-        **LockPermitCancelInspections** method.
-  ```  
-    protected override void ExecuteCDSPlugin(LocalPluginContext localcontext)
-    
-    {
-    
-    base.ExecuteCDSPlugin(localcontext);
-    
-    }
-```
-5.  Get the target entity reference, entity, set status reason to lock, and
-    update the permit record.
-
-    -  Get the target **Entity Reference** and **Entity**.
-```
-    var permitEntityRef =
-    localcontext.PluginExecutionContext.InputParameters["Target"] as
-    EntityReference;
-    
-    Entity permitEntity = new Entity(permitEntityRef.LogicalName,
-    permitEntityRef.Id);
- ```   
-6.  Add **Trace** message and Set the **Status Reason** to **Lock**. 463270000
-    is the lock value of the Status Reason option-set and statuscode is the name
-    of the status reason field.
-```
-    localcontext.Trace("Updating Permit Id : " + permitEntityRef.Id);
-    
-    permitEntity["statuscode"] = new OptionSetValue(463270000);
-```
-7.  Update the **Permit** record and add **Trace** message.
-```
-    localcontext.OrganizationService.Update(permitEntity);
-    
-    localcontext.Trace("Updated Permit Id " + permitEntityRef.Id);
-```
-Task #2: Get Related Inspections and Cancel
---------------------------------------------
-
-1.  Create query and condition expressions.
-
-    -  Create the **QueryExpression**. Add the code below to the
-        **ExecuteCDSPlugin** method.
-```
-    QueryExpression qe = new QueryExpression();
-    
-    qe.EntityName = "contoso_inspection";
-    
-    qe.ColumnSet = new ColumnSet("statuscode");
-```
-2.  Create the **ConditionExpression**.
-```
-    ConditionExpression condition = new ConditionExpression();
-    
-    condition.Operator = ConditionOperator.Equal;
-    
-    condition.AttributeName = "contoso_permit";
-    
-    condition.Values.Add(permitEntityRef.Id);
-```
-3.  Set the **Criteria** of the query.
-```
-    qe.Criteria = new FilterExpression(LogicalOperator.And);
-```
-4.  Add the **ConditionExpression** to the **Criteria** of the
-    **QueryExpression**.
-```
-    qe.Criteria.Conditions.Add(condition);
-```
-5.  Retrieve the inspections and iterate through the returned entities.
-
-    -  Retrieve the **Inspections** and add **Trace** messages.
-```
-    localcontext.Trace("Retrieving inspections for Permit Id " +
-    permitEntityRef.Id);
-    
-    var inspectionsResult = localcontext.OrganizationService.RetrieveMultiple(qe);
-    
-    localcontext.Trace("Retrievied " + inspectionsResult.TotalRecordCount + "
-    inspection records");
-```
-6.  Create a **variable** that will keep track of the canceled **Inspections**
-    count and Iterate through the returned entities.
-```
-    int canceledInspectionsCount = 0;
-    
-    foreach (var inspection in inspectionsResult.Entities)
-    
-    {
-    
-    }
-```
-7.  Retrieve the selected status reason option and check if it is set to new
-    request or pending.
-
-    -  Get the currently selected value of the **Status Reason** option-set.
-        Add the code below inside the **foreach** loop.
-```
-    var currentValue = inspection.GetAttributeValue<OptionSetValue>("statuscode");
-```
-8.  Check if the selected option is **New Request** or **Pending** and increment
-    the count. 1 is the value of the New Request option and 463270000 id the
-    value of the Pending option. This should be placed inside the foreach loop.
-```  
-    if (currentValue.Value == 1 || currentValue.Value == 463270000)
-    
-    {
-    
-    canceledInspectionsCount++;
-    
-    }
-  ```  
-9.  Cancel the inspections that are pending or new request
-
-    -  Set the **Status Reason** selected value to **Canceled**. Add the code
-        below inside the if statement inside the foreach loop. Make sure that
-        463270003 is the value for **Canceled Status Reason** in the
-        **Inspections** entity. If this differs, please update the value with
-        actual value for **Canceled Status Reason**.
-```
-    inspection["statuscode"] = new OptionSetValue(463270003);
-```
-10.  Update the **Inspection** and add **Trace** messages.
-```
-    localcontext.Trace("Canceling inspection Id : " + inspection.Id);
-    
-    localcontext.OrganizationService.Update(inspection);
-    
-    localcontext.Trace("Canceled inspection Id : " + inspection.Id);
-```
-
-Task #3: Set Output Parameter and Create Note Record
------------------------------------------------------
-
-1.  Check if at least one Inspection was canceled and CanceledInspectionsCount
-    output Parameter.
-
-    -  Check if at least one **Inspection** was canceled. Add the code below
-        after the **foreach** loop.
-```
-    if (canceledInspectionsCount > 0)
-    
-    {
-    
-    }
-```
-
-2.  Set the **CanceledInspectionsCount** output parameter. Add the code below
-    inside the if statement outside the foreach loop.
-```
-    localcontext.PluginExecutionContext.OutputParameters["CanceledInspectionsCount"]
-    = canceledInspectionsCount + " Inspections were canceled";
-```
-
-3.  Check if the Input Parameters contain Reason and Create the Note record.
-
-    -  Check if **Reason** contains in the **InputParameters**. Add the code
-        below after the last if statement.
-```
-    if (localcontext.PluginExecutionContext.InputParameters.ContainsKey("Reason"))
-    
-    {
-    
-    }
-```
-
-4.  Build the **Note** record and add **Trace Message**. Add the code below
-    inside the if statement.
-```
-    localcontext.Trace("building a note reocord");
-    
-    Entity note = new Entity("annotation");
-    
-    note["subject"] = "Permit Locked";
-    
-    note["notetext"] = "Reason for locking this permit: " +
-    localcontext.PluginExecutionContext.InputParameters["Reason"];
-    
-    note["objectid"] = permitEntityRef;
-    
-    note["objecttypecode"] = permitEntityRef.LogicalName;
-```
-
-5.  Add Trace Message and create the Note record.
-```
-    localcontext.Trace("Creating a note reocord");
-    
-    var createdNoteId = localcontext.OrganizationService.Create(note);
- ```   
--  Check if the Note record was created and add Trace Message.
-
- ```   
-    if (createdNoteId != Guid.Empty)
-    
-    localcontext.Trace("Note record was created");
-```
+            localcontext.PluginExecutionContext.OutputParameters["CanceledInspectionsCount"] = canceledInspectionsCount + " Inspections were canceled";
 
-6.  Build plugin by right click on the project and select **Build** and make
-    sure the build succeeds.
+    ![Set output parameter - screenshot](M02L03/Static/Mod_01_Plugin_image34.png)
 
-Task #4: Deploy Plugin
------------------------
+2. Check if the Input Parameters contain Reason and Create the Note record.
 
-1.  If you do not have the plugin registration tool running already, follow
-    instructions in Exercise #1, Task #2 to run the tool and connect to the
-    organization.
+	- Check if **Reason** contains in the **InputParameters**. Add the code below after the last if statement.
 
-2.  Update the assembly
+            if (localcontext.PluginExecutionContext.InputParameters.ContainsKey("Reason"))
+            {
 
-    - Select **ContosoPackageProject** and click **Update**.
+            }
 
-    -  Click … to **Browse**.
+	- Build the **Note** record and add **Trace Message**. Add the code below inside the if statement.
 
-    -  Browse to the **debug** folder of your plugin project, select the
-        **ContosoPackageProject**.dll file and click **Open**.
+            localcontext.Trace("building a note reocord");
+            Entity note = new Entity("annotation");
+            note["subject"] = "Permit Locked";
+            note["notetext"] = "Reason for locking this permit: " + localcontext.PluginExecutionContext.InputParameters["Reason"];
+            note["objectid"] = permitEntityRef;
+            note["objecttypecode"] = permitEntityRef.LogicalName;
 
-    -  Check **Select All** checkbox and click **Update Selected Plugins**.
+	- Add Trace Message and create the Note record.
 
-    -  Click **OK**.
+            localcontext.Trace("Creating a note reocord");
+            var createdNoteId = localcontext.OrganizationService.Create(note);
 
-3.  Register new step
+	- Check if the Note record was created and add Trace Message.
 
-    -  Select the assembly (ContosoPackageProject.LockPermitCancelInspections).
+            if (createdNoteId != Guid.Empty)
+            localcontext.Trace("Note record was created");
 
-    -  Click **Register** and select **Register New Step**.
+    ![Create not record - screenshot](M02L03/Static/Mod_01_Plugin_image35.png)
 
-    -  Enter **contoso** in the **Message** textbox and select
-        **contoso_LockPermit**.
+3. Build plugin by right clicking on the project and select **Build** and make sure the build succeeds.
 
-    -  Enter **contoso_permit** for **Primary Entity**.
+## Task #4: Deploy Plugin
 
-    -  Make sure that Event Handler is selected for
-        **LockPermitCancelInspections** plugin.
+1. If you do not have the plugin registration tool running already, follow instructions in Exercise #1, Task #2 to run the tool and connect to the organization.
 
-    -  Select **PreOperation** from dropdown for **Event Pipeline Stage of
-        Execution** and click **Register New Step**.
+2. Update the assembly
 
-    -  Step should now be registered in the assembly.
+	- Select **ContosoPackageProject** and click **Update**.
 
-Exercise #3: Test Plugins
-==========================
+    ![Update assembly - screenshot](M02L03/Static/Mod_01_Plugin_image36.png)
 
-**Objective:** In this exercise, you will test the plugins you created
+	- Click … to **Browse**.
 
-Task #1: Test Lock Plugin
---------------------------
+    ![Browse for assembly - screenshot](M02L03/Static/Mod_01_Plugin_image37.png)
 
-1.  Add Plugin Assembly and SDK Messages to the Permit Management solution
+	- Browse to the **debug** folder of your plugin project, select the **ContosoPackageProject**.dll file and click **Open**.
 
-2.  Note: This is only required to be done after deploying it first time to
-    ensure that when the project solution is moved to the production
-    environments, the plugins and the registered steps are included.
+	- Check **Select All** checkbox and click **Update Selected Plugins**.
 
-    -  Sign in to <https://make.powerapps.com> and make sure you have the
-        **Dev** environment selected.
+    ![Update plugins - screenshot](M02L03/Static/Mod_01_Plugin_image38.png)
 
-    -  Select **Solution** and click to open the **Permit Management**
-        solution.
+	- Click **OK**.
 
-    -  Click **Add Existing | Other | Plugin Assembly**.
+3. Register new step
 
-    -  Select **ContosoPackageProject** and click **Add**.
+	- Select the assembly (ContosoPackageProject.LockPermitCancelInspections).
 
-    -  Click **Add Existing | Other | SDK Message**.
+	- Click **Register** and select **Register** **New Step**.
 
-    -  Select both SDK Messages you created and click **Add**.
+    ![Register new step - screenshot](M02L03/Static/Mod_01_Plugin_image39.png)
 
-    -  Now, open the **Permit** entity, select **Settings** and check **Enable
-        Attachments and Notes,** and click Done. Finally, select Save Entity.
+	- Enter **contoso** in the **Message** textbox and select **contoso_LockPermit**.
 
-    -  **Publish All Customizations**.
+    ![Select message and primary entity - screenshot](M02L03/Static/Mod_01_Plugin_image40.png)
 
-3.  Start the Permit Management application and enable Plugin Tracing
+	- Enter **contoso_permit** for **Primary Entity**.
 
-    -  Sign in to <https://make.powerapps.com> and make sure you have the
-        **Dev** environment selected.
+	- Make sure that Event Handler is selected for **LockPermitCancelInspections** plugin.
 
-    -  Select **Apps**.
+	- Select **PreOperation** from dropdown for **Event Pipeline Stage of Execution** and click **Register New Step**.
 
-    -  Click to open the **Permit Management** application.
+    ![Register new step - screenshot](M02L03/Static/Mod_01_Plugin_image41.png)
 
-    -  Click **Settings** and select **Advanced Settings**.
+	- Step should now be registered in the assembly.
 
-    -  Click **Settings** and select **Administration**.
+    ![Registered step - screenshot](M02L03/Static/Mod_01_Plugin_image42.png)
 
-    -  Click **System Settings**.
+# Exercise #3: Test Plugins
 
-    -  Select **Customization** tab.
+**Objective:** In this exercise, you will test the plugins you created.
 
-    -  Set Enable Plugin Logging to Plugin Trace Log to **All** and click
-        **OK**.
+## Task #1: Test Lock Plugin
 
-4.  Create test record
+1. Add Plugin Assembly and Plugin - step to the Permit Management solution   
+‎
 
-    -  Go back to the **Permit Management** application.
+    **Note**: This is only required to be done after deploying it first time to ensure that when the project solution is moved to the production environments, the plugins and the registered steps are included.
 
-    -  Select **Inspections**.
+	- Sign in to [Power Apps maker portal](https://make.powerapps.com/) and make sure you have the **Dev** environment selected.
 
-    -  You should have two inspections one **Failed** and one **Passed**. If
-        not, open them and update the records.
+	- Select **Solution** and click to open the **Permit Management** solution.
 
-    -  Click **New**.
+    ![Open solution - screenshot](M02L03/Static/Mod_01_Plugin_image43.png)
 
-    -  Provide the information shown in the image below and click **Save**.
+	- Click **Add Existing | Other | Plugin Assembly**.
 
-    -  Click **New** again.
+    ![Add existing plugin - screenshot](M02L03/Static/Mod_01_Plugin_image44.png)
 
-    -  Provide the information shown in the image below and click **Save**.
+	- Select **ContosoPackageProject** and click **Add**.
 
-5.  Lock Permit.
+    ![Add plug in assembly - screenshot](M02L03/Static/Mod_01_Plugin_image45.png)
 
-    -  Select **Inspections**.
+	- Click **Add Existing | Other | Plug-in step**.
 
-    -  Make sure you have 4 inspections and with different Status Reason value.
+    ![Add existing plugin step - screenshot](M02L03/Static/Mod_01_Plugin_image46.png)
 
-    -  Select **Permits**.
+	- Select both SDK Messages you created and click **Add**.
 
-    -  Click to open the **Test Permit**.
+    ![Select steps and add - screenshot](M02L03/Static/Mod_01_Plugin_image47.png)
 
-    -  Make sure the Status Reason is set to Active and click **Lock Permit**.
+	- Now, open the **Permit** entity and click **Settings**.
 
-    -  The Custom Action should run. Click **Refresh**.
+    ![Entity settings - screenshot](M02L03/Static/Mod_01_Plugin_image48.png)
 
-    -  The **Status Reason** value should change to **Locked**
+	- Check **Enable Attachments and Notes,** and then click **Done**. 
 
-6.  Check if the Pending and New Request Inspections get canceled
+    ![Enable attachments for entity - screenshot](M02L03/Static/Mod_01_Plugin_image49.png)
 
-    -  Select Inspections.
+	- Click **Okay**.
 
-    -  You should now have two canceled inspections.
+	- Finally, select **Save Entity**.
 
-7.  Check if the Note record was created.
+	- Select **Solutions** and click **Publish All Customizations**.
 
-    -  Click **Advanced Find**.
+2. Start the Permit Management application and enable Plugin Tracing
 
-    -  Select **Notes** and click Results.
+	- Select **Apps**.
 
-    -  You should at least one **Note** record. Click to open the **Note**
-        record.
+	- Click to open the **Permit Management** application.
 
-    -  The Regarding field should be set to the Permit you locked.
+    ![Start application - screenshot](M02L03/Static/Mod_01_Plugin_image50.png)
 
-    -  Close the **Note** record.
+	- Click **Settings** and select **Advanced Settings**.
 
-8. Close **Advanced Find**.
+    ![Advanced settings - screenshot](M02L03/Static/Mod_01_Plugin_image51.png)
 
-Task #2: Test Restrict New Permit Creation Plugin
---------------------------------------------------
+	- Click **Settings** and select **Administration**.
 
-1.  Try to create new Permit record for the One Microsoft Way Build Site
+    ![Administration - screenshot](M02L03/Static/Mod_01_Plugin_image52.png)
 
-    -  Select **Permits**.
+	- Click **System Settings**.
 
-    -  Click **New**.
+	- Select **Customization** tab.
 
-    -  Provide the information below and click **Save**.
+	- Set Enable Plugin Logging to Plugin Trace Log to **All** and click **OK**.
 
-    -  You should get the error below. Click OK.
+    ![Enable plugin logging - screenshot](M02L03/Static/Mod_01_Plugin_image53.png)
 
-    -  The Record should not get created.
+3. Create test record
 
-    -  Select **Permits**.
+	- Go back to the **Permit Management** application.
 
-    -  Click **Discard**.
+	- Select **Inspections**.
 
-    -  You should have only one Permit record.
+	- You should have two inspections one **Failed** and one **Passed**. If not, open them and update the records.
 
-Exercise #4: Plugin Trace Log and Debugging
-============================================
+	- Click **New**.
 
-**Objective:** In this exercise, you will check the Plugin Trace log and debug
-the plugins
+    ![Create new inspection record - screenshot](M02L03/Static/Mod_01_Plugin_image54.png)
 
-Task #1: Plugin Trace Log
---------------------------
+	- Enter **Plumbing Inspection** for **Name**, select **Initial Inspection** for **Type**, select a permit, provide **Schedule Data**, select **Pending** for **Status Reason**, and click **Save**.
 
-1.  Open Plugin trace Log.
+    ![Create inspection record - screenshot](M02L03/Static/Mod_01_Plugin_image55.png)
 
-    -  Go back to the Permit Management application.
+	- Click **New** again.
 
-    -  Click **Settings** and select **Advanced Settings**.
+	- Enter **Mechanical Inspection** for **Name**, select **Initial Inspection** for **Type**, select a permit, provide **Schedule Date**, select **New Request** for **Status Reason**, and click **Save**.
 
-    -  Click **Settings** and select **Plugin Trace Log**.
+4. Lock Permit.
 
-    -  You should see at least two logs.
+	- Select **Inspections**.
 
-2.  Open the log and see what was logged.
+	- Make sure you have four inspection records and with various Status Reason value.
 
-- Click 1.  to open the Lock Permit log.
+    ![Inspection records - screenshot](M02L03/Static/Mod_01_Plugin_image56.png)
 
-- Scroll down to the Execution section.
+	- Select **Permits**.
 
--  Examine your Trace messages.
+	- Click to open the **Test Permit**.
 
-Task #2: Debugging Plugins (Optional)
---------------------------------------
+    ![Open permit record - screenshot](M02L03/Static/Mod_01_Plugin_image57.png)
 
-Follow these steps to debug your plugins:
-<https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/tutorial-debug-plug-in>
+	- Make sure the Status Reason is set to Active and click **Lock Permit**.
 
+    ![Lock permit record - screenshot](M02L03/Static/Mod_01_Plugin_image58.png)
+
+	- The Custom Action should run. Click **Refresh**.
+
+    ![Refresh record - screenshot](M02L03/Static/Mod_01_Plugin_image59.png)
+
+	- The **Status Reason** value should change to **Locked** 
+
+    ![Locked record - screenshot](M02L03/Static/Mod_01_Plugin_image60.png)
+
+5. Check if the Pending and New Request Inspections get canceled
+
+	- Select Inspections.
+
+	- You should now have two canceled inspections.  
+‎
+
+**If you completed the PCF module:**
+    ![Inspection timeline control - screenshot](M02L03/Static/Mod_01_Plugin_image61.png)
+
+**If you did not complete the PCF module:**
+    ![Active inspections view - screenshot](M02L03/Static/Mod_01_Plugin_image62.png)
+
+ 
+
+6. Check if the Note record was created.
+
+	- Click **Advanced Find**.
+
+    ![Advanced find - screenshot](M02L03/Static/Mod_01_Plugin_image63.png)
+
+	- Select **Notes** and click **Results**.
+
+    ![notes results - screenshot](M02L03/Static/Mod_01_Plugin_image64.png)
+
+	- You should at least one **Note** record. Click to open the **Note** record.
+
+    ![Open note record - screenshot](M02L03/Static/Mod_01_Plugin_image65.png)
+
+	- The Regarding field should be set to the Permit you locked.
+
+    ![Note record details - screenshot](M02L03/Static/Mod_01_Plugin_image66.png)
+
+	- Close the **Note** record. Close **Advanced Find**.
+
+## Task #2: Test Restrict New Permit Creation Plugin
+
+1. Try to create new Permit record for the One Microsoft Way Build Site
+
+	- Select **Permits**.
+
+	- Click **New**.
+
+    ![Create new permit - screenshot](M02L03/Static/Mod_01_Plugin_image67.png)
+
+	- Provide the information below and click **Save**.
+
+    ![Save new permit - screenshot](M02L03/Static/Mod_01_Plugin_image68.png)
+
+	- You should get the error below. Click **OK**.
+
+    ![Record locked message - screenshot](M02L03/Static/Mod_01_Plugin_image69.png)
+
+	- The record should not get created.
+
+    ![Unsaved changes - screenshot](M02L03/Static/Mod_01_Plugin_image70.png)
+
+	- Select **Permits**.
+
+	- Click **Discard**.
+
+    ![Discard changes - screenshot](M02L03/Static/Mod_01_Plugin_image71.png)
+
+	- You should have only one Permit record.
+
+    ![Permits list - screenshot](M02L03/Static/Mod_01_Plugin_image72.png)
+
+ 
+
+  
+‎ 
+
+# Exercise #4: Plugin Trace Log and Debugging
+
+**Objective:** In this exercise, you will check the Plugin Trace log and debug the plugins
+
+## Task #1: Plugin Trace Log
+
+1. Open Plugin trace Log.
+
+	- Go back to the Permit Management application.
+
+	- Click **Settings** and select **Advanced Settings**.
+
+    ![Advanced settings - screenshot](M02L03/Static/Mod_01_Plugin_image73.png)
+
+	- Click **Settings** and select **Plugin Trace Log**.
+
+    ![Plug-in trace log - screenshot](M02L03/Static/Mod_01_Plugin_image74.png)
+
+	- You should see at least two logs.
+
+    ![Plug-in trace logs list - screenshot](M02L03/Static/Mod_01_Plugin_image75.png)
+
+2. Open the log and see what was logged.
+
+	- Click to open the Lock Permit log.
+
+    ![Open log - screenshot](M02L03/Static/Mod_01_Plugin_image76.png)
+
+	- Scroll down to the Execution section.
+
+	- Examine your Trace messages.
+
+    ![Trace message - screenshot](M02L03/Static/Mod_01_Plugin_image77.png)
+
+ 
+
+## Task #2: Debugging Plugins (Optional)
+
+Follow these steps to debug your plugins [https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/tutorial-debug-plug-in](https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/tutorial-debug-plug-in) 
