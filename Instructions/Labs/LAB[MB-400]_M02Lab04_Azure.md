@@ -1,4 +1,8 @@
-
+---
+lab:
+    title: 'Lab 04 – Azure Functions'
+    module: 'Module 02'
+---
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
