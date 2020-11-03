@@ -1,3 +1,9 @@
+---
+lab:
+    title: 'Lab 01 – Data Modeling'
+    module: 'Module 1'
+---
+
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
 ## Module 1, Lab 01 – Data Modeling
