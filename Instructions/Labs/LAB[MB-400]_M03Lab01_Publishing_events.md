@@ -1,4 +1,8 @@
-
+---
+lab:
+    title: 'Lab 01 – Publishing Events Externally'
+    module: 'Module 03'
+---
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
