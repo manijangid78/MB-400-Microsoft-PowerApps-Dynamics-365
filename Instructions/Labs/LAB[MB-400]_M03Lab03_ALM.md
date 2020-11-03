@@ -1,4 +1,8 @@
-
+---
+lab:
+    title: 'Lab 03 – Application Lifecycle Management'
+    module: 'Module 03'
+---
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
