@@ -1,4 +1,8 @@
-
+---
+lab:
+    title: 'Lab 03 – Plug-ins'
+    module: 'Module 02'
+---
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
