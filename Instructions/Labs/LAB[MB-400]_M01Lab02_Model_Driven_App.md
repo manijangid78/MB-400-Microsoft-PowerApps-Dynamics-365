@@ -1,3 +1,8 @@
+---
+lab:
+    title: 'Lab 01 – Lab 02 – Model driven app'
+    module: 'Module 1'
+---
 MB400: Microsoft Power Apps Developer + Dynamics 365 Developer
 
 ## Module 01, Lab 02 – Model driven app
