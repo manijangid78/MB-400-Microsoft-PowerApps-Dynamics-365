@@ -1,3 +1,8 @@
+---
+lab:
+    title: 'Lab 02 – Custom Connector'
+    module: 'Module 03'
+---
 
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
