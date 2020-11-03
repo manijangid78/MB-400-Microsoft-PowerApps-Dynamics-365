@@ -1,4 +1,8 @@
-
+---
+lab:
+    title: 'Lab 03 – Canvas app'
+    module: 'Module 1'
+---
 
 MB400: Microsoft Power Apps + Dynamics 365 Developer
 
