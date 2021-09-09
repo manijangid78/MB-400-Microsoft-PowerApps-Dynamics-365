@@ -237,7 +237,7 @@ As part of configuring Azure DevOps ALM automation, you will complete the follow
 
 	- Make sure you still have the **Power Platform Export Solution** task selected.
 
-	- Click **Manage** service sonnection. This will open a new window.
+	- Click **Manage** service connection. This will open a new window.
 
     ![Manage service connection - screenshot](M03L03/Static/Mod_3_ALM_image30.png)
 
